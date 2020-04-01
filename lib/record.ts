@@ -5,16 +5,15 @@ import {
   IDecoder,
   ValidationError
 } from "./types.ts";
-import { failure, success } from "./result.ts";
+import { failure, success, isFailure } from "./result.ts";
+import { string } from "./string.ts";
 
-type RecordKey = string | number | symbol;
-
-class RecordDecoder<TKey extends RecordKey, TValue = unknown>
-  implements ICustomizableDecoder<Record<TKey, TValue>> {
-  private rules: Array<ValidationRule<Record<TKey, TValue>>> = [];
+class RecordDecoder<TValue = unknown>
+  implements ICustomizableDecoder<Record<string, TValue>> {
+  private readonly rules: Array<ValidationRule<Record<string, TValue>>> = [];
+  private readonly keyDecoder = string();
 
   constructor(
-    private readonly keyDecoder: IDecoder<TKey>,
     private readonly valueDecoder: IDecoder<TValue>
   ) {}
 
@@ -23,7 +22,7 @@ class RecordDecoder<TKey extends RecordKey, TValue = unknown>
     return this;
   }
 
-  decode(value: unknown): DecodeResult<Record<TKey, TValue>> {
+  decode(value: unknown): DecodeResult<Record<string, TValue>> {
     if (
       typeof value !== "object" || value === null ||
       Object.keys(value).length === 0
@@ -33,25 +32,31 @@ class RecordDecoder<TKey extends RecordKey, TValue = unknown>
       );
     }
 
-    const errors = Object.entries(value).map(([key, value]) =>
-      ([
-        this.keyDecoder.decode(key),
-        this.valueDecoder.decode(value)
-      ])
+    const errors = Object.entries(value).reduce<ValidationError[]>(
+      (allErrors, [key, value]) => {
+        const keyResult = this.keyDecoder.decode(key);
+        if (isFailure(keyResult)) {
+          allErrors.push(...keyResult.errors);
+        }
+
+        const valueResult = this.valueDecoder.decode(value);
+        if (isFailure(valueResult)) {
+          allErrors.push(...valueResult.errors);
+        }
+
+        return allErrors;
+      },
+      []
     );
 
     if (errors.length > 0) {
-      return failure();
+      return failure(errors);
     }
-    // Decode all object keys
-    // Decode all object values
-    // Probably do it per entry and shape the message as such
-  }
 
-  private validateRules(): ValidationError<Record<TKey, TValue>> {}
+    return success(value as Record<string, TValue>);
+  }
 }
 
-export const record = <TKey extends RecordKey, TValue>(
-  keyDecoder: IDecoder<TKey>,
+export const record = <TValue>(
   valueDecoder: IDecoder<TValue>
-) => new RecordDecoder(keyDecoder, valueDecoder);
+) => new RecordDecoder(valueDecoder);
