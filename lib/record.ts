@@ -10,6 +10,8 @@ import { string } from "./string.ts";
 
 class RecordDecoder<TValue = unknown>
   implements ICustomizableDecoder<Record<string, TValue>> {
+  readonly __TYPE__: Record<string, TValue>;
+
   private readonly rules: Array<ValidationRule<Record<string, TValue>>> = [];
   private readonly keyDecoder = string();
 

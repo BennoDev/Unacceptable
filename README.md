@@ -4,12 +4,12 @@
 - boolean
 - number
 - array
-- nullish
+- null
+- undefined
 - record (object with keys and values typed but not set in stone)
-- object (just validates its non null object)
-- interface (or type)
-
-
 - any
 - unknown
+- object (just validates its non null object)
+
+- interface (or type)
 - date?

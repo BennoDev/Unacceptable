@@ -5,6 +5,8 @@ import {
 import { failure, success } from "./result.ts";
 
 export class BooleanDecoder implements IDecoder<boolean> {
+  readonly __TYPE__: boolean;
+
   decode(value: unknown): DecodeResult<boolean> {
     return typeof value !== "boolean"
       ? failure([{ message: "Given value is not a boolean", value }])

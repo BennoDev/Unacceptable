@@ -7,6 +7,8 @@ import {
 import { failure, success } from "./result.ts";
 
 class StringDecoder implements ICustomizableDecoder<string> {
+  readonly __TYPE__: string;
+
   private rules: Array<ValidationRule<string>> = [];
 
   decode(value: unknown): DecodeResult<string> {

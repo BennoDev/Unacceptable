@@ -25,6 +25,8 @@ export type DecodeResult<Type = unknown> = Success<Type>
  * A decoder is an entity that can decode and encode object and JSON payloads.
  */
 export interface IDecoder<Type> {
+  readonly __TYPE__: Type;
+
   decode: (value: unknown) => DecodeResult<Type>;
 }
 
