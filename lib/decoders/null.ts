@@ -1,8 +1,8 @@
-import { IDecoder, DecodeResult } from "./types.ts";
-import { success, failure } from "./result.ts";
+import { IDecoder, DecodeResult } from "../types.ts";
+import { success, failure } from "../result.ts";
 
 class NullDecoder implements IDecoder<null> {
-  readonly __TYPE__: null;
+  readonly __TYPE__: null = null;
 
   decode(value: unknown): DecodeResult<null> {
     return value === null

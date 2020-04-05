@@ -4,13 +4,13 @@ import {
   DecodeResult,
   IDecoder,
   ValidationError
-} from "./types.ts";
-import { failure, success, isFailure } from "./result.ts";
+} from "../types.ts";
+import { failure, success, isFailure } from "../result.ts";
 import { string } from "./string.ts";
 
 class RecordDecoder<TValue = unknown>
   implements ICustomizableDecoder<Record<string, TValue>> {
-  readonly __TYPE__: Record<string, TValue>;
+  readonly __TYPE__: Record<string, TValue> = {};
 
   private readonly rules: Array<ValidationRule<Record<string, TValue>>> = [];
   private readonly keyDecoder = string();

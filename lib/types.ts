@@ -1,4 +1,4 @@
-export type ValidationRuleResult = string | null;
+type ValidationRuleResult = string | null;
 
 export type ValidationRule<Type = unknown> = (val: Type) =>
   ValidationRuleResult;
@@ -31,9 +31,13 @@ export interface IDecoder<Type> {
 }
 
 /**
- * A decoder is an entity that can decode and encode object and JSON payloads.
+ * A decoder is an entity that can decode values.
  * This one can implement custom rules for the payload to be validated.
  */
 export interface ICustomizableDecoder<Type> extends IDecoder<Type> {
   withRule: (rule: ValidationRule) => this;
 }
+
+export type TypeOf<
+  TDecoder extends IDecoder<any> | ICustomizableDecoder<any>
+> = TDecoder["__TYPE__"];

@@ -3,11 +3,11 @@ import {
   ValidationError,
   ICustomizableDecoder,
   DecodeResult
-} from "./types.ts";
-import { failure, success } from "./result.ts";
+} from "../types.ts";
+import { failure, success } from "../result.ts";
 
 class NumberDecoder implements ICustomizableDecoder<number> {
-  readonly __TYPE__: number;
+  readonly __TYPE__: number = 0;
 
   private rules: Array<ValidationRule<number>> = [];
 

@@ -3,11 +3,11 @@ import {
   ValidationRule,
   DecodeResult,
   ValidationError
-} from "./types.ts";
-import { failure, success } from "./result.ts";
+} from "../types.ts";
+import { failure, success } from "../result.ts";
 
 class StringDecoder implements ICustomizableDecoder<string> {
-  readonly __TYPE__: string;
+  readonly __TYPE__: string = "";
 
   private rules: Array<ValidationRule<string>> = [];
 

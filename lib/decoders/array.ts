@@ -4,12 +4,12 @@ import {
   ValidationRule,
   ValidationError,
   ICustomizableDecoder
-} from "./types.ts";
-import { failure, success, isFailure } from "./result.ts";
+} from "../types.ts";
+import { failure, success, isFailure } from "../result.ts";
 
 class ArrayDecoder<TElement = unknown>
   implements ICustomizableDecoder<TElement[]> {
-  readonly __TYPE__: TElement[];
+  readonly __TYPE__: TElement[] = [];
 
   private rules: Array<ValidationRule<TElement[]>> = [];
 
