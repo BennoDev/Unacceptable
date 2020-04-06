@@ -1,12 +1,12 @@
-import { assertEquals } from "../../test-deps.ts";
+import { runSuccessTestCases } from "./test-helpers.ts";
 import { record } from "./record.ts";
 import { number } from "./number.ts";
 import { string } from "./string.ts";
 import { array } from "./array.ts";
 
-const cases = [
+runSuccessTestCases([
   {
-    description: "Record<string, number>",
+    description: "record: should success for: Record<string, number>",
     decoder: record(number()),
     value: {
       property: 13,
@@ -14,7 +14,7 @@ const cases = [
     }
   },
   {
-    description: "Record<string, string>",
+    description: "record: should success for: Record<string, string>",
     decoder: record(string()),
     value: {
       property: "13",
@@ -22,7 +22,8 @@ const cases = [
     }
   },
   {
-    description: "Record<string, Record<string, string>>",
+    description:
+      "record: should success for: Record<string, Record<string, string>>",
     decoder: record(record(string())),
     value: {
       property: {
@@ -32,7 +33,7 @@ const cases = [
   },
   {
     description:
-      "Record<string, Record<string, Array<Record<string, number>>>>",
+      "record: should success for: Record<string, Record<string, Array<Record<string, number>>>>",
     decoder: record(record(array(record(number())))),
     value: {
       property: {
@@ -44,15 +45,4 @@ const cases = [
       }
     }
   }
-];
-
-cases.forEach(({ decoder, value, description }) => {
-  Deno.test({
-    name:
-      `RecordDecoder: should successfully decode a record type: ${description}`,
-    fn: () => {
-      const result = decoder.decode(value);
-      assertEquals(result.success, true);
-    }
-  });
-});
+]);

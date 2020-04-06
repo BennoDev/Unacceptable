@@ -4,12 +4,12 @@ import { boolean } from "./boolean.ts";
 runSuccessTestCases([
   {
     decoder: boolean(),
-    description: "boolean: should return success for true",
+    description: "boolean: should return success for: true",
     value: true
   },
   {
     decoder: boolean(),
-    description: "boolean: should return success for false",
+    description: "boolean: should return success for: false",
     value: false
   }
 ]);
