@@ -12,5 +12,3 @@ class NullDecoder implements IDecoder<null> {
 }
 
 export const nullDecoder = () => new NullDecoder();
-
-

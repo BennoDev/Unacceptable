@@ -19,7 +19,7 @@ class RecordDecoder<TValue = unknown>
     private readonly valueDecoder: IDecoder<TValue>
   ) {}
 
-  withRule(rule: ValidationRule<unknown>): this {
+  withRule(rule: ValidationRule<Record<string, TValue>>): this {
     this.rules.push(rule);
     return this;
   }
@@ -34,7 +34,29 @@ class RecordDecoder<TValue = unknown>
       );
     }
 
-    const errors = Object.entries(value).reduce<ValidationError[]>(
+    const recordShapeErrors = this.validateRecordShape(value);
+    if (recordShapeErrors.length > 0) {
+      return failure(recordShapeErrors);
+    }
+
+    // From now on we can safely cast to Record<string, TValue> since we verified this with `validateRecordShape`.
+    const ruleErrors = this.validateRules(value as Record<string, TValue>);
+    if (ruleErrors.length > 0) {
+      return failure(ruleErrors);
+    }
+
+    return success(value as Record<string, TValue>);
+  }
+
+  private validateRules(value: Record<string, TValue>): ValidationError[] {
+    return this.rules.reduce<ValidationError[]>((errors, rule) => {
+      const error = rule(value);
+      return error ? [...errors, { message: error, value: value }] : errors;
+    }, []);
+  }
+
+  private validateRecordShape(value: object): ValidationError[] {
+    return Object.entries(value).reduce<ValidationError[]>(
       (allErrors, [key, value]) => {
         const keyResult = this.keyDecoder.decode(key);
         if (isFailure(keyResult)) {
@@ -50,12 +72,6 @@ class RecordDecoder<TValue = unknown>
       },
       []
     );
-
-    if (errors.length > 0) {
-      return failure(errors);
-    }
-
-    return success(value as Record<string, TValue>);
   }
 }
 
