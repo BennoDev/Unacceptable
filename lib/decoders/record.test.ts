@@ -75,11 +75,14 @@ runFailureTestCases([
 // Test cases with rules
 const doesntContainMessageKey: ValidationRule<Record<string, string>> = (
   value
-) => {
-  return value.hasOwnProperty("message")
+) =>
+  value.hasOwnProperty("message")
     ? "Dont use message property, it conflicts with internal implementation"
     : null;
-};
+
+const containsUnderscore: ValidationRule<string> = (
+  value
+) => value.includes("_") ? null : "String has to contain an underscore";
 
 runSuccessTestCases([
   {
@@ -89,5 +92,33 @@ runSuccessTestCases([
     },
     description:
       "record: should return success with rule: doesntContainMessageKey"
+  },
+  {
+    decoder: record(string().withRule(containsUnderscore)).withRule(
+      doesntContainMessageKey
+    ),
+    value: {
+      otherProperty: "bye_bud"
+    },
+    description:
+      "record: should return success with rule: containsUnderscore + doesntContainMessageKey"
+  }
+]);
+
+runFailureTestCases([
+  {
+    decoder: record(string()).withRule(doesntContainMessageKey),
+    value: {
+      message: "Please don't"
+    },
+    description:
+      "record: should return failure with rule: doesntContainMessageKey"
+  },
+  {
+    decoder: record(string().withRule(containsUnderscore)),
+    value: {
+      message: "needs an underscore"
+    },
+    description: "record: should return failure with rule: containsUnderscore"
   }
 ]);
