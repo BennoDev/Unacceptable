@@ -1,7 +1,4 @@
-import {
-  IDecoder,
-  DecodeResult
-} from "../types.ts";
+import { IDecoder, DecodeResult } from "../types.ts";
 import { failure, success } from "../result.ts";
 
 class BooleanDecoder implements IDecoder<boolean> {

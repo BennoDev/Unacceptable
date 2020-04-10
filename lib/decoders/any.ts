@@ -1,7 +1,4 @@
-import {
-  IDecoder,
-  DecodeResult
-} from "../types.ts";
+import { IDecoder, DecodeResult } from "../types.ts";
 import { success } from "../result.ts";
 
 class AnyDecoder implements IDecoder<any> {
