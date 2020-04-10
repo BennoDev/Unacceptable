@@ -4,7 +4,7 @@ import {
 } from "../types.ts";
 import { failure, success } from "../result.ts";
 
-export class BooleanDecoder implements IDecoder<boolean> {
+class BooleanDecoder implements IDecoder<boolean> {
   readonly __TYPE__: boolean = false;
 
   decode(value: unknown): DecodeResult<boolean> {

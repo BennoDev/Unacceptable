@@ -58,11 +58,9 @@ runFailureTestCases([
 ]);
 
 // Test cases with rules
-const maxFiveItems: ValidationRule<number[]> = (value) => {
-  console.log("hey");
-  console.log(value);
-  return value.length > 5 ? "Array cant contain more than 5 elements" : null;
-};
+const maxFiveItems: ValidationRule<number[]> = (value) =>
+  value.length > 5 ? "Array cant contain more than 5 elements" : null;
+
 const notEmpty: ValidationRule<number[]> = (value) =>
   value.length === 0 ? "Array cant be empty" : null;
 
