@@ -23,11 +23,20 @@ class ArrayDecoder<TElement = unknown>
       return failure([{ message: "Value is not an array", value }]);
     }
 
-    const errors = this.decodeElements(value);
-    return errors.length > 0 ? failure(errors) : success(value);
+    const elementErrors = this.decodeElements(value);
+    if (elementErrors.length > 0) {
+      return failure(elementErrors);
+    }
+
+    const ruleErrors = this.validateRules(value);
+    if (ruleErrors.length > 0) {
+      return failure(ruleErrors);
+    }
+
+    return success(value);
   }
 
-  withRule(rule: ValidationRule<unknown>): this {
+  withRule(rule: ValidationRule<TElement[]>): this {
     this.rules.push(rule);
     return this;
   }
@@ -36,6 +45,13 @@ class ArrayDecoder<TElement = unknown>
     return value.reduce<ValidationError[]>((errors, val) => {
       const result = this.elementDecoder.decode(val);
       return isFailure(result) ? [...errors, ...result.errors] : errors;
+    }, []);
+  }
+
+  private validateRules(value: TElement[]): ValidationError[] {
+    return this.rules.reduce<ValidationError[]>((errors, rule) => {
+      const error = rule(value);
+      return error ? [...errors, { message: error, value: value }] : errors;
     }, []);
   }
 }
