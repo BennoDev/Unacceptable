@@ -6,10 +6,19 @@
 - array
 - null
 - undefined
-- record (object with keys and values typed but not set in stone)
+- record
 - any
 - unknown
-- object (just validates its non null object)
+- object
+- type
+- union
 
-- interface (or type)
+- optional / partial
+- branded
+- tuple
+
+- intersection?
+- readonly?
+- recursive?
 - date?
+- error reporters?

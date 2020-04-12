@@ -1,5 +1,7 @@
 type ValidationRuleResult = string | null;
 
+export type Literal = string | number;
+
 export type ValidationRule<Type = unknown> = (val: Type) =>
   ValidationRuleResult;
 
