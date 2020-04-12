@@ -2,10 +2,13 @@ import { IDecoder, DecodeResult, Literal } from "../types.ts";
 import { success, failure, isSuccess } from "../result.ts";
 import { LiteralDecoder } from "./literal.ts";
 
-class UnionDecoder<Type extends Literal> implements IDecoder<Type> {
-  readonly __TYPE__: any;
+class UnionDecoder<Type extends [Literal, ...Literal[]]>
+  implements IDecoder<Type> {
+  readonly __TYPE__!: Type[number];
 
-  constructor(private readonly literalDecoders: LiteralDecoder<Type>[]) {}
+  constructor(
+    private readonly literalDecoders: LiteralDecoder<Type[number]>[]
+  ) {}
 
   decode(value: unknown): DecodeResult<Type> {
     const isValidLiteral = this.literalDecoders.find(decoder =>
@@ -19,6 +22,6 @@ class UnionDecoder<Type extends Literal> implements IDecoder<Type> {
   }
 }
 
-export const union = <Type extends Literal>(
-  literalDecoders: LiteralDecoder<Type>[]
+export const union = <Type extends [Literal, ...Literal[]]>(
+  literalDecoders: LiteralDecoder<Type[number]>[]
 ) => new UnionDecoder(literalDecoders);

@@ -3,14 +3,12 @@ import { success, failure } from "../result.ts";
 
 // Exported here because the type is required for the UnionDecoder
 export class LiteralDecoder<Type extends Literal> implements IDecoder<Type> {
-  readonly __TYPE__: Type;
+  readonly __TYPE__!: Type;
 
-  constructor(literal: Type) {
-    this.__TYPE__ = literal;
-  }
+  constructor(private readonly literal: Type) {}
 
   decode(value: unknown): DecodeResult<Type> {
-    return value === this.__TYPE__
+    return value === this.literal
       ? success(value as Type)
       : failure(
         [{

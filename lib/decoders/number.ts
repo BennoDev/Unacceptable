@@ -7,7 +7,7 @@ import {
 import { failure, success } from "../result.ts";
 
 class NumberDecoder implements ICustomizableDecoder<number> {
-  readonly __TYPE__: number = 0;
+  readonly __TYPE__!: number;
 
   private rules: Array<ValidationRule<number>> = [];
 

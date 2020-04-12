@@ -2,7 +2,7 @@ import { IDecoder, DecodeResult } from "../types.ts";
 import { success, failure } from "../result.ts";
 
 class UndefinedDecoder implements IDecoder<undefined> {
-  readonly __TYPE__: undefined = undefined;
+  readonly __TYPE__!: undefined;
 
   decode(value: unknown): DecodeResult<undefined> {
     return typeof value === "undefined"

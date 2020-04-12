@@ -2,7 +2,7 @@ import { IDecoder, DecodeResult } from "../types.ts";
 import { failure, success } from "../result.ts";
 
 class ObjectDecoder implements IDecoder<object> {
-  readonly __TYPE__: object = {};
+  readonly __TYPE__!: object;
 
   decode(value: unknown): DecodeResult<object> {
     return typeof value === "object" && value !== null
