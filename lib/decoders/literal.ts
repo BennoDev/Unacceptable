@@ -1,8 +1,7 @@
 import { IDecoder, DecodeResult, Literal } from "../types.ts";
 import { success, failure } from "../result.ts";
 
-// Exported here because the type is required for the UnionDecoder
-export class LiteralDecoder<Type extends Literal> implements IDecoder<Type> {
+class LiteralDecoder<Type extends Literal> implements IDecoder<Type> {
   readonly __TYPE__!: Type;
 
   constructor(private readonly literal: Type) {}

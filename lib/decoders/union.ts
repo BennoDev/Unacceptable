@@ -1,27 +1,42 @@
-import { IDecoder, DecodeResult, Literal } from "../types.ts";
+import { IDecoder, DecodeResult, TypeOf } from "../types.ts";
 import { success, failure, isSuccess } from "../result.ts";
-import { LiteralDecoder } from "./literal.ts";
 
-class UnionDecoder<Type extends [Literal, ...Literal[]]>
-  implements IDecoder<Type> {
-  readonly __TYPE__!: Type[number];
+class UnionDecoder<
+  Type extends [
+    IDecoder<any>,
+    IDecoder<any>,
+    ...IDecoder<any>[]
+  ]
+> implements IDecoder<TypeOf<Type[number]>> {
+  readonly __TYPE__!: TypeOf<Type[number]>;
 
   constructor(
-    private readonly literalDecoders: LiteralDecoder<Type[number]>[]
+    private readonly decoders: Type
   ) {}
 
-  decode(value: unknown): DecodeResult<Type> {
-    const isValidLiteral = this.literalDecoders.find(decoder =>
-      isSuccess(decoder.decode(value))
-    );
-    if (!isValidLiteral) {
+  decode(value: unknown): DecodeResult<TypeOf<Type[number]>> {
+    if (!this.isValid(value)) {
       return failure([{ message: "", value }]);
     }
 
-    return success(value as Type);
+    return success(value as TypeOf<Type[number]>);
+  }
+
+  private isValid(value: unknown): boolean {
+    for (var i = 0; i < this.decoders.length; i++) {
+      if (isSuccess(this.decoders[i].decode(value))) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
 
-export const union = <Type extends [Literal, ...Literal[]]>(
-  literalDecoders: LiteralDecoder<Type[number]>[]
-) => new UnionDecoder(literalDecoders);
+export const union = <
+  Type extends [
+    IDecoder<any>,
+    IDecoder<any>,
+    ...IDecoder<any>[]
+  ]
+>(decoders: Type) => new UnionDecoder(decoders);

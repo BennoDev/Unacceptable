@@ -54,5 +54,10 @@ runFailureTestCases([
     decoder: object(),
     description: "object: should return failure for: undefined",
     value: undefined
+  },
+  {
+    decoder: object(),
+    description: "object: should return failure for: []",
+    value: []
   }
 ]);
