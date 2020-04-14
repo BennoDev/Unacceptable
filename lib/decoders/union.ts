@@ -16,7 +16,9 @@ class UnionDecoder<
 
   decode(value: unknown): DecodeResult<TypeOf<Type[number]>> {
     if (!this.isValid(value)) {
-      return failure([{ message: "", value }]);
+      return failure(
+        [{ message: "Given value is not allow in union", value }]
+      );
     }
 
     return success(value as TypeOf<Type[number]>);

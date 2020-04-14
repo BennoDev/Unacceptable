@@ -22,3 +22,4 @@
 - recursive?
 - date?
 - error reporters?
+- rewrite all map / filter / find / reduce to loops for performance

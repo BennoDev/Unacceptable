@@ -55,12 +55,6 @@ runFailureTestCases([
     value: "CREATEDZ"
   },
   {
-    decoder: union([literal("OK"), literal("CREATED"), literal("NO_CONTENT")]),
-    description:
-      "union: should return failure for: 'OK' | 'CREATED' | 'NO_CONTENT' -> 'CREATEDZ'",
-    value: "CREATEDZ"
-  },
-  {
     decoder: union([string(), number()]),
     description:
       "union: should return failure for: string | number -> boolean",
