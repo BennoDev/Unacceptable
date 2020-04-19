@@ -12,9 +12,13 @@ class UnionDecoder<
   constructor(
     private readonly decoders: Type
   ) {
-    super(value => !this.isValid(value) ? failure(
-      [{ message: "Given value is not allow in union", value }]
-    ) : success(value as TypeOf<Type[number]>));
+    super(value =>
+      !this.isValid(value)
+        ? failure(
+          [{ message: "Given value is not allow in union", value }]
+        )
+        : success(value as TypeOf<Type[number]>)
+    );
   }
 
   private isValid(value: unknown): boolean {
