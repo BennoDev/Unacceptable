@@ -1,4 +1,5 @@
 import { IDecoder, DecodeResult, TypeOf } from "../types.ts";
+import { Decoder } from "../decoder.ts";
 import { success, failure, isSuccess } from "../result.ts";
 
 class UnionDecoder<
@@ -7,21 +8,13 @@ class UnionDecoder<
     IDecoder<any>,
     ...IDecoder<any>[]
   ]
-> implements IDecoder<TypeOf<Type[number]>> {
-  readonly __TYPE__!: TypeOf<Type[number]>;
-
+> extends Decoder<TypeOf<Type[number]>> {
   constructor(
     private readonly decoders: Type
-  ) {}
-
-  decode(value: unknown): DecodeResult<TypeOf<Type[number]>> {
-    if (!this.isValid(value)) {
-      return failure(
-        [{ message: "Given value is not allow in union", value }]
-      );
-    }
-
-    return success(value as TypeOf<Type[number]>);
+  ) {
+    super(value => !this.isValid(value) ? failure(
+      [{ message: "Given value is not allow in union", value }]
+    ) : success(value as TypeOf<Type[number]>));
   }
 
   private isValid(value: unknown): boolean {
