@@ -1,4 +1,4 @@
-import { ValidationError, Failure, Success, DecodeResult } from "./types.ts";
+import { ValidationError, Success, Failure, DecodeResult } from "./types.ts";
 
 export const success = <Type = unknown>(val: Type): Success<
   Type

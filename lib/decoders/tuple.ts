@@ -1,5 +1,5 @@
-import { Decoder, DecoderWithRules } from "../decoder.ts";
-import { IDecoder, ValidationError, TypeOf } from "../types.ts";
+import { ValidationError, TypeOf, IDecoder } from "../types.ts";
+import { Decoder } from "../decoder.ts";
 import { failure, isFailure, success } from "../result.ts";
 
 type TupleDecoders = [
@@ -8,8 +8,7 @@ type TupleDecoders = [
 ];
 
 type TupleType<Type extends TupleDecoders> = {
-  [Key in keyof Type]: Type[Key] extends Decoder<any> | DecoderWithRules<any>
-    ? TypeOf<Type[Key]>
+  [Key in keyof Type]: Type[Key] extends IDecoder<any> ? TypeOf<Type[Key]>
     : never;
 };
 
@@ -51,6 +50,6 @@ class TupleDecoder<Type extends TupleDecoders>
 }
 
 export const tuple = <Type extends [
-  IDecoder<any>,
-  ...IDecoder<any>[]
+  Decoder<any>,
+  ...Decoder<any>[]
 ]>(decoders: Type) => new TupleDecoder(decoders);
