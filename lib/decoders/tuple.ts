@@ -1,4 +1,4 @@
-import { ValidationError, TypeOf, IDecoder } from "../types.ts";
+import { ValidationError, TypeOf, IDecoder, DecodeResult } from "../types.ts";
 import { Decoder } from "../decoder.ts";
 import { failure, isFailure, success } from "../result.ts";
 
@@ -15,24 +15,26 @@ type TupleType<Type extends TupleDecoders> = {
 class TupleDecoder<Type extends TupleDecoders>
   extends Decoder<TupleType<Type>> {
   constructor(readonly decoders: Type) {
-    super(value => {
-      if (!Array.isArray(value)) {
-        return failure(
-          [{ message: "Given value is not an array | tuple", value }]
-        );
-      }
+    super();
+  }
 
-      if (value.length !== this.decoders.length) {
-        return failure(
-          [{ message: "Given value is correct tuple length", value }]
-        );
-      }
+  decode(value: unknown): DecodeResult<TupleType<Type>> {
+    if (!Array.isArray(value)) {
+      return failure(
+        [{ message: "Given value is not an array | tuple", value }]
+      );
+    }
 
-      const errors = this.decodeElements(value);
-      return errors.length > 0
-        ? failure(errors)
-        : success(value as TupleType<Type>);
-    });
+    if (value.length !== this.decoders.length) {
+      return failure(
+        [{ message: "Given value is correct tuple length", value }]
+      );
+    }
+
+    const errors = this.decodeElements(value);
+    return errors.length > 0
+      ? failure(errors)
+      : success(value as TupleType<Type>);
   }
 
   private decodeElements(value: unknown[]): ValidationError[] {

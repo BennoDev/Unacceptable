@@ -1,9 +1,14 @@
-import { ValidationRule, ValidationError, IDecoder, DecodeResult } from "./types";
+import {
+  ValidationRule,
+  ValidationError,
+  IDecoder,
+  DecodeResult
+} from "./types.ts";
 
 export abstract class Decoder<Type> implements IDecoder<Type> {
   readonly __TYPE__!: Type;
 
-  constructor(readonly decode: (value: unknown) => DecodeResult<Type>) {}
+  abstract decode(value: unknown): DecodeResult<Type>;
 }
 
 export abstract class DecoderWithRules<Type> implements IDecoder<Type> {
@@ -11,7 +16,7 @@ export abstract class DecoderWithRules<Type> implements IDecoder<Type> {
 
   protected rules: Array<ValidationRule<Type>> = [];
 
-  constructor(readonly decode: (value: unknown) => DecodeResult<Type>) {}
+  abstract decode(value: unknown): DecodeResult<Type>;
 
   withRule(rule: ValidationRule<Type>): this {
     this.rules.push(rule);

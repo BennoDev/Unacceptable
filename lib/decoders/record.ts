@@ -1,4 +1,4 @@
-import { ValidationError } from "../types.ts";
+import { ValidationError, DecodeResult } from "../types.ts";
 import { DecoderWithRules, Decoder } from "../decoder.ts";
 import { failure, success, isFailure } from "../result.ts";
 import { string } from "./string.ts";
@@ -8,29 +8,33 @@ class RecordDecoder<TValue = unknown>
   constructor(
     private readonly valueDecoder: Decoder<TValue> | DecoderWithRules<TValue>
   ) {
-    super(value => {
-      if (
-        typeof value !== "object" || value === null ||
-        Object.keys(value).length === 0
-      ) {
-        return failure(
-          [{ value, message: "Given value is not a non-empty object" }]
-        );
-      }
+    super();
+  }
 
-      const recordShapeErrors = this.validateRecordShape(value);
-      if (recordShapeErrors.length > 0) {
-        return failure(recordShapeErrors);
-      }
+  decode(value: unknown): DecodeResult<
+    Record<string, TValue>
+  > {
+    if (
+      typeof value !== "object" || value === null ||
+      Object.keys(value).length === 0
+    ) {
+      return failure(
+        [{ value, message: "Given value is not a non-empty object" }]
+      );
+    }
 
-      // From now on we can safely cast to Record<string, TValue> since we verified this with `validateRecordShape`.
-      const ruleErrors = this.validateRules(value as Record<string, TValue>);
-      if (ruleErrors.length > 0) {
-        return failure(ruleErrors);
-      }
+    const recordShapeErrors = this.validateRecordShape(value);
+    if (recordShapeErrors.length > 0) {
+      return failure(recordShapeErrors);
+    }
 
-      return success(value as Record<string, TValue>);
-    });
+    // From now on we can safely cast to Record<string, TValue> since we verified this with `validateRecordShape`.
+    const ruleErrors = this.validateRules(value as Record<string, TValue>);
+    if (ruleErrors.length > 0) {
+      return failure(ruleErrors);
+    }
+
+    return success(value as Record<string, TValue>);
   }
 
   private validateRecordShape(value: object): ValidationError[] {

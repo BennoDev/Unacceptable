@@ -1,8 +1,8 @@
 import { assertEquals } from "../../test-deps.ts";
-import { IDecoder, ICustomizableDecoder } from "../types.ts";
+import { IDecoder } from "../types.ts";
 
 type TestCase = {
-  decoder: IDecoder<any> | ICustomizableDecoder<any>;
+  decoder: IDecoder<any>;
   value: unknown;
   description: string;
 };
