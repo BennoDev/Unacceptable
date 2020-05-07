@@ -71,11 +71,7 @@ runSuccessTestCases([
   {
     description: "array: should return success with rule: maxFiveItems",
     decoder: array(number()).withRule(maxFiveItems),
-    value: [
-      1,
-      2,
-      3
-    ]
+    value: [1, 2, 3]
   },
   {
     description: "array: should return success with rule: notEmpty",
@@ -88,14 +84,7 @@ runFailureTestCases([
   {
     description: "array: should return failure with rule: maxFiveItems",
     decoder: array(number()).withRule(maxFiveItems),
-    value: [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ]
+    value: [1, 2, 3, 4, 5, 6]
   },
   {
     description: "array: should return failure with rule: notEmpty",
@@ -103,3 +92,13 @@ runFailureTestCases([
     value: [2, 4, 6, 8, -10]
   }
 ]);
+
+const stuff = array(
+  string().withRule((val) =>
+    Number.isNaN(parseInt(val, 10))
+      ? "Has to be able to be parsed to number"
+      : null
+  )
+).withRule((val) => (val.length > 4 ? "Array is too short" : null));
+const result = stuff.decode(["2", 3, 4, "klqkzld"]);
+console.log(JSON.stringify(result));
