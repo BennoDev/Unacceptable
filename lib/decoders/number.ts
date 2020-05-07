@@ -5,15 +5,13 @@ import { failure, success } from "../result.ts";
 class NumberDecoder extends DecoderWithRules<number> {
   decode(value: unknown): DecodeResult<number> {
     if (typeof value !== "number") {
-      return failure(
-        [{ message: "Given value is not a valid number", value }]
-      );
+      return failure([
+        { message: "Given value is not a valid number", name: "number", value }
+      ]);
     }
 
     const errors = this.validateRules(value);
-    return errors.length > 0
-      ? failure(errors)
-      : success(value);
+    return errors.length > 0 ? failure(errors) : success(value);
   }
 }
 

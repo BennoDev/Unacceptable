@@ -1,26 +1,28 @@
-import { ValidationError, DecodeResult } from "../types.ts";
-import { DecoderWithRules, Decoder } from "../decoder.ts";
+import { ValidationError, DecodeResult, IDecoder } from "../types.ts";
+import { DecoderWithRules } from "../decoder.ts";
 import { failure, success, isFailure } from "../result.ts";
 import { string } from "./string.ts";
 
-class RecordDecoder<TValue = unknown>
-  extends DecoderWithRules<Record<string, TValue>> {
-  constructor(
-    private readonly valueDecoder: Decoder<TValue> | DecoderWithRules<TValue>
-  ) {
+class RecordDecoder<TValue = unknown> extends DecoderWithRules<
+  Record<string, TValue>
+> {
+  constructor(private readonly valueDecoder: IDecoder<TValue>) {
     super();
   }
 
-  decode(value: unknown): DecodeResult<
-    Record<string, TValue>
-  > {
+  decode(value: unknown): DecodeResult<Record<string, TValue>> {
     if (
-      typeof value !== "object" || value === null ||
+      typeof value !== "object" ||
+      value === null ||
       Object.keys(value).length === 0
     ) {
-      return failure(
-        [{ value, message: "Given value is not a non-empty object" }]
-      );
+      return failure([
+        {
+          message: "Given value is not a non-empty object",
+          name: "record",
+          value,
+        },
+      ]);
     }
 
     const recordShapeErrors = this.validateRecordShape(value);
@@ -58,6 +60,5 @@ class RecordDecoder<TValue = unknown>
   }
 }
 
-export const record = <TValue>(
-  valueDecoder: Decoder<TValue> | Decoder<TValue>
-) => new RecordDecoder(valueDecoder);
+export const record = <TValue>(valueDecoder: IDecoder<TValue>) =>
+  new RecordDecoder(valueDecoder);

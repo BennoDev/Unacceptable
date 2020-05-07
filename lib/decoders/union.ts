@@ -3,23 +3,21 @@ import { Decoder } from "../decoder.ts";
 import { success, failure, isSuccess } from "../result.ts";
 
 class UnionDecoder<
-  Type extends [
-    IDecoder<any>,
-    IDecoder<any>,
-    ...IDecoder<any>[]
-  ]
+  Type extends [IDecoder<any>, IDecoder<any>, ...IDecoder<any>[]]
 > extends Decoder<TypeOf<Type[number]>> {
-  constructor(
-    private readonly decoders: Type
-  ) {
+  constructor(private readonly decoders: Type) {
     super();
   }
 
   decode(value: unknown): DecodeResult<TypeOf<Type[number]>> {
     return !this.isValid(value)
-      ? failure(
-        [{ message: "Given value is not allow in union", value }]
-      )
+      ? failure([
+        {
+          message: "Given value is not allow in union",
+          name: "union",
+          value
+        }
+      ])
       : success(value as TypeOf<Type[number]>);
   }
 
@@ -35,9 +33,7 @@ class UnionDecoder<
 }
 
 export const union = <
-  Type extends [
-    IDecoder<any>,
-    IDecoder<any>,
-    ...IDecoder<any>[]
-  ]
->(decoders: Type) => new UnionDecoder(decoders);
+  Type extends [IDecoder<any>, IDecoder<any>, ...IDecoder<any>[]]
+>(
+  decoders: Type
+) => new UnionDecoder(decoders);

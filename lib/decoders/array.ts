@@ -1,14 +1,11 @@
 import { IDecoder, ValidationError, DecodeResult } from "../types.ts";
 import { failure, success, isFailure } from "../result.ts";
-import { DecoderWithRules, Decoder } from "../decoder.ts";
+import { DecoderWithRules } from "../decoder.ts";
 
-class ArrayDecoder<ElementType = unknown>
-  extends DecoderWithRules<ElementType[]> {
-  constructor(
-    private readonly elementDecoder: Decoder<ElementType> | DecoderWithRules<
-      ElementType
-    >
-  ) {
+class ArrayDecoder<ElementType = unknown> extends DecoderWithRules<
+  ElementType[]
+> {
+  constructor(private readonly elementDecoder: IDecoder<ElementType>) {
     super();
   }
 
@@ -31,7 +28,7 @@ class ArrayDecoder<ElementType = unknown>
   }
 
   private decodeElements(value: unknown[]): ValidationError[] {
-    return value.reduce<ValidationError[]>((errors, val) => {
+    return value.reduce<ValidationError[]>((errors, val, index) => {
       const result = this.elementDecoder.decode(val);
       return isFailure(result) ? [...errors, ...result.errors] : errors;
     }, []);

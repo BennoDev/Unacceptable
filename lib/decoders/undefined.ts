@@ -6,7 +6,9 @@ class UndefinedDecoder extends Decoder<undefined> {
   decode(value: unknown): DecodeResult<undefined> {
     return typeof value === "undefined"
       ? success(value)
-      : failure([{ message: "Given value is not undefined", value }]);
+      : failure([
+        { message: "Given value is not undefined", name: "undefined", value }
+      ]);
   }
 }
 
