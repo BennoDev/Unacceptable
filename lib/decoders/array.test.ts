@@ -58,14 +58,21 @@ runFailureTestCases([
 ]);
 
 // Test cases with rules
-const maxFiveItems: ValidationRule<number[]> = (value) =>
-  value.length > 5 ? "Array cant contain more than 5 elements" : null;
+const maxFiveItems: ValidationRule<number[]> = {
+  name: "maxFiveItems",
+  fn: (value) =>
+    value.length > 5 ? "Array cant contain more than 5 elements" : null
+};
 
-const notEmpty: ValidationRule<number[]> = (value) =>
-  value.length === 0 ? "Array cant be empty" : null;
+const notEmpty: ValidationRule<number[]> = {
+  name: "notEmpty",
+  fn: (value) => value.length === 0 ? "Array cant be empty" : null
+};
 
-const isPositive: ValidationRule<number> = (value) =>
-  value <= 0 ? "Number has to be larger than 0" : null;
+const isPositive: ValidationRule<number> = {
+  name: "isPositive",
+  fn: (value) => value <= 0 ? "Number has to be larger than 0" : null
+};
 
 runSuccessTestCases([
   {
@@ -92,13 +99,3 @@ runFailureTestCases([
     value: [2, 4, 6, 8, -10]
   }
 ]);
-
-const stuff = array(
-  string().withRule((val) =>
-    Number.isNaN(parseInt(val, 10))
-      ? "Has to be able to be parsed to number"
-      : null
-  )
-).withRule((val) => (val.length > 4 ? "Array is too short" : null));
-const result = stuff.decode(["2", 3, 4, "klqkzld"]);
-console.log(JSON.stringify(result));

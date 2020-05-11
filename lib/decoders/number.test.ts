@@ -54,20 +54,31 @@ runFailureTestCases([
 ]);
 
 // Test cases with rules
-const between0And10: ValidationRule<number> = (value) =>
-  value >= 0 && value <= 10 ? null : "Number is not in between 0 and 10";
+const between0And10: ValidationRule<number> = {
+  name: "between0And10",
+  fn: (value) =>
+    value >= 0 && value <= 10 ? null : "Number is not in between 0 and 10"
+};
 
-const isPositive: ValidationRule<number> = (value) =>
-  value >= 0 ? null : "Number is not positive";
+const isPositive: ValidationRule<number> = {
+  name: "isPositive",
+  fn: (value) => value >= 0 ? null : "Number is not positive"
+};
 
-const isInteger: ValidationRule<number> = (value) =>
-  Number.isInteger(value) ? null : "Number is not an integer";
+const isInteger: ValidationRule<number> = {
+  name: "isInteger",
+  fn: (value) => Number.isInteger(value) ? null : "Number is not an integer"
+};
 
-const biggerThanZero: ValidationRule<number> = (value) =>
-  value > 0 ? null : "Number is not bigger than 0";
+const biggerThanZero: ValidationRule<number> = {
+  name: "biggerThanZero",
+  fn: (value) => value > 0 ? null : "Number is not bigger than 0"
+};
 
-const smallerThanHundred: ValidationRule<number> = (value) =>
-  value < 100 ? null : "Number is not smaller than 100";
+const smallerThanHundred: ValidationRule<number> = {
+  name: "smallerThanHundred",
+  fn: (value) => value < 100 ? null : "Number is not smaller than 100"
+};
 
 runSuccessTestCases([
   {

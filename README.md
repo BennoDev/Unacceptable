@@ -16,30 +16,14 @@
 
 - type
 - partial
+- go over all testing
+- supply comments for all code (especially public APIs)
+- performance testing
+    * rewrite all map / filter / find / reduce to loops for performance
+    * remove spread operator and use concat
 
 - branded?
 - readonly?
 - recursive?
 - date?
 - error reporters?
-- rewrite all map / filter / find / reduce to loops for performance
-
-Preferred error format?
-
-```ts
-type Error = {
-    message: string;
-    value: string;
-    key?: string;
-}
-
-{
-    key: Error[],
-    key: Error[],
-    key: Error[]
-}
-
-OR
-
-Error[]
-```

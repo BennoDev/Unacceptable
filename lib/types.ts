@@ -1,6 +1,9 @@
 export type Literal = string | number;
 
-export type ValidationRule<Type = unknown> = (val: Type) => string | null;
+export type ValidationRule<Type = unknown> = {
+  name: string;
+  fn: (val: Type) => string | null;
+};
 
 export type ValidationError = {
   /**
@@ -14,19 +17,14 @@ export type ValidationError = {
   message: string;
 
   /**
-   * Name of the constraint that failed.
+   * Name of the rule that failed.
    */
   name?: string;
 
   /**
-   * In case of array or type, key of the value failed.
+   * Full path of the key relative to the root that is being decoded.
    */
-  key?: string;
-
-  /**
-   * Full path of the key relative to the parent that is being decoded.
-   */
-  path?: string;
+  path?: string[];
 };
 
 export type Success<Type> = {

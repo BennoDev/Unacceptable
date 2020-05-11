@@ -57,6 +57,6 @@ class TupleDecoder<Type extends TupleDecoders> extends Decoder<
   }
 }
 
-export const tuple = <Type extends [Decoder<any>, ...Decoder<any>[]]>(
+export const tuple = <Type extends TupleDecoders>(
   decoders: Type
 ) => new TupleDecoder(decoders);
