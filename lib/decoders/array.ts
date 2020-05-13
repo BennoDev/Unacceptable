@@ -1,15 +1,16 @@
-import { IDecoder, ValidationError, DecodeResult } from "../types.ts";
+import { IDecoder, ValidationError, DecodeResult, TypeOf } from "../types.ts";
 import { failure, success, isFailure } from "../result.ts";
 import { DecoderWithRules } from "../decoder.ts";
 
-class ArrayDecoder<ElementType = unknown> extends DecoderWithRules<
-  ElementType[]
-> {
-  constructor(private readonly elementDecoder: IDecoder<ElementType>) {
+class ArrayDecoder<ElementDecoder extends IDecoder<any>>
+  extends DecoderWithRules<
+    Array<TypeOf<ElementDecoder>>
+  > {
+  constructor(private readonly elementDecoder: ElementDecoder) {
     super();
   }
 
-  decode(value: unknown): DecodeResult<ElementType[]> {
+  decode(value: unknown): DecodeResult<Array<TypeOf<ElementDecoder>>> {
     if (!Array.isArray(value)) {
       return failure([{ message: "Value is not an array", value }]);
     }
@@ -37,5 +38,6 @@ class ArrayDecoder<ElementType = unknown> extends DecoderWithRules<
   }
 }
 
-export const array = <TDecode>(decoder: IDecoder<TDecode>) =>
-  new ArrayDecoder(decoder);
+export const array = <ElementDecoder extends IDecoder<any>>(
+  decoder: ElementDecoder
+) => new ArrayDecoder(decoder);

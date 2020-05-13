@@ -45,4 +45,4 @@ export interface IDecoder<Type> {
   decode: (value: unknown) => DecodeResult<Type>;
 }
 
-export type TypeOf<TDecoder extends IDecoder<any>> = TDecoder["__TYPE__"];
+export type TypeOf<Decoder extends IDecoder<any>> = Decoder["__TYPE__"];
