@@ -20,8 +20,8 @@ class RecordDecoder<TValue = unknown> extends DecoderWithRules<
         {
           message: "Given value is not a non-empty object",
           name: "record",
-          value,
-        },
+          value
+        }
       ]);
     }
 
@@ -40,20 +40,13 @@ class RecordDecoder<TValue = unknown> extends DecoderWithRules<
   }
 
   private validateRecordShape(value: object): ValidationError[] {
-    const keyDecoder = string();
     return Object.entries(value).reduce<ValidationError[]>(
-      (allErrors, [key, value]) => {
-        const keyResult = keyDecoder.decode(key);
-        if (isFailure(keyResult)) {
-          allErrors.push(...keyResult.errors);
+      (errors, [key, value]) => {
+        const result = this.valueDecoder.decode(value);
+        if (isFailure(result)) {
+          errors.push(...this.withPath(result.errors, key));
         }
-
-        const valueResult = this.valueDecoder.decode(value);
-        if (isFailure(valueResult)) {
-          allErrors.push(...valueResult.errors);
-        }
-
-        return allErrors;
+        return errors;
       },
       []
     );
