@@ -31,7 +31,7 @@ class ArrayDecoder<ElementType = unknown> extends DecoderWithRules<
     return value.reduce<ValidationError[]>((errors, val, index) => {
       const result = this.elementDecoder.decode(val);
       return isFailure(result)
-        ? [...errors, ...this.withContext(result.errors, index.toString())]
+        ? [...errors, ...this.withPath(result.errors, index.toString())]
         : errors;
     }, []);
   }

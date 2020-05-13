@@ -10,22 +10,22 @@ export abstract class Decoder<Type> implements IDecoder<Type> {
 
   abstract decode(value: unknown): DecodeResult<Type>;
 
-  protected withContext(
+  protected withPath(
     errors: ValidationError[],
     part: string
   ): ValidationError[] {
-    const errorsWithContext: ValidationError[] = [];
+    const errorswithPath: ValidationError[] = [];
 
     for (const error of errors) {
       const path = Array.isArray(error.path)
         ? [part, ...error.path]
         : [part];
-      errorsWithContext.push(
+      errorswithPath.push(
         { ...error, path }
       );
     }
 
-    return errorsWithContext;
+    return errorswithPath;
   }
 }
 
@@ -50,21 +50,21 @@ export abstract class DecoderWithRules<Type> implements IDecoder<Type> {
     }, []);
   }
 
-  protected withContext(
+  protected withPath(
     errors: ValidationError[],
     part: string
   ): ValidationError[] {
-    const errorsWithContext: ValidationError[] = [];
+    const errorswithPath: ValidationError[] = [];
 
     for (const error of errors) {
       const path = Array.isArray(error.path)
         ? [part, ...error.path]
         : [part];
-      errorsWithContext.push(
+      errorswithPath.push(
         { ...error, path }
       );
     }
 
-    return errorsWithContext;
+    return errorswithPath;
   }
 }
