@@ -12,15 +12,16 @@
 - object
 - union
 - tuple
+- type
 
 - intersection
-- type
 - partial
 - go over all testing
 - supply comments for all code (especially public APIs)
 - performance testing
-    * rewrite all map / filter / find / reduce to loops for performance
-    * remove spread operator and use concat
+
+  - rewrite all map / filter / find / reduce to loops for performance
+  - remove spread operator and use concat
 
 - branded?
 - readonly?
