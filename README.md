@@ -12,8 +12,8 @@
 - object
 - union
 - tuple
-- intersection
 
+- intersection
 - type
 - partial
 - go over all testing
