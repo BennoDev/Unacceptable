@@ -13,8 +13,8 @@
 - union
 - tuple
 - type
-
 - intersection
+
 - partial
 - go over all testing
 - supply comments for all code (especially public APIs)
