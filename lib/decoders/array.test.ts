@@ -1,20 +1,21 @@
+import { assertEquals } from "../../test-deps.ts";
 import { runSuccessTestCases, runFailureTestCases } from "./test-helpers.ts";
 import { array } from "./array.ts";
 import { number } from "./number.ts";
 import { string } from "./string.ts";
 import { record } from "./record.ts";
-import { ValidationRule } from "../types.ts";
+import { ValidationRule, Failure } from "../types.ts";
 
 runSuccessTestCases([
   {
     description: "array: should return success for: Array<number>",
     decoder: array(number()),
-    value: [1, 2, 3]
+    value: [1, 2, 3],
   },
   {
     description: "array: should return success for: Array<string>",
     decoder: array(string()),
-    value: ["abc", "def", "ghi"]
+    value: ["abc", "def", "ghi"],
   },
   {
     description:
@@ -22,25 +23,25 @@ runSuccessTestCases([
     decoder: array(record(number())),
     value: [
       {
-        property: 1
+        property: 1,
       },
       {
-        property: 2
-      }
-    ]
-  }
+        property: 2,
+      },
+    ],
+  },
 ]);
 
 runFailureTestCases([
   {
     description: "array: should return failure for: Array<number>",
     decoder: array(number()),
-    value: ["1", "2", "3"]
+    value: ["1", "2", "3"],
   },
   {
     description: "array: should return failure for: Array<string>",
     decoder: array(string()),
-    value: [1, 2, 3]
+    value: [1, 2, 3],
   },
   {
     description:
@@ -48,54 +49,65 @@ runFailureTestCases([
     decoder: array(record(number())),
     value: [
       {
-        property: "hey"
+        property: "hey",
       },
       {
-        property: "there"
-      }
-    ]
-  }
+        property: "there",
+      },
+    ],
+  },
 ]);
 
 // Test cases with rules
 const maxFiveItems: ValidationRule<number[]> = {
   name: "maxFiveItems",
   fn: (value) =>
-    value.length > 5 ? "Array cant contain more than 5 elements" : null
+    value.length > 5 ? "Array cant contain more than 5 elements" : null,
 };
 
 const notEmpty: ValidationRule<number[]> = {
   name: "notEmpty",
-  fn: (value) => value.length === 0 ? "Array cant be empty" : null
+  fn: (value) => (value.length === 0 ? "Array cant be empty" : null),
 };
 
 const isPositive: ValidationRule<number> = {
   name: "isPositive",
-  fn: (value) => value <= 0 ? "Number has to be larger than 0" : null
+  fn: (value) => (value <= 0 ? "Number has to be larger than 0" : null),
 };
 
 runSuccessTestCases([
   {
     description: "array: should return success with rule: maxFiveItems",
     decoder: array(number()).withRule(maxFiveItems),
-    value: [1, 2, 3]
+    value: [1, 2, 3],
   },
   {
     description: "array: should return success with rule: notEmpty",
     decoder: array(number().withRule(isPositive)).withRule(notEmpty),
-    value: [2, 4, 6, 8, 10]
-  }
+    value: [2, 4, 6, 8, 10],
+  },
 ]);
 
 runFailureTestCases([
   {
     description: "array: should return failure with rule: maxFiveItems",
     decoder: array(number()).withRule(maxFiveItems),
-    value: [1, 2, 3, 4, 5, 6]
+    value: [1, 2, 3, 4, 5, 6],
   },
   {
     description: "array: should return failure with rule: notEmpty",
     decoder: array(number().withRule(isPositive)).withRule(notEmpty),
-    value: [2, 4, 6, 8, -10]
-  }
+    value: [2, 4, 6, 8, -10],
+  },
 ]);
+
+Deno.test({
+  name: "array: should add error path information",
+  fn: () => {
+    const decoder = array(string());
+    const result = decoder.decode(["first", 2, "third"]) as Failure;
+
+    assertEquals(result.errors.length, 1);
+    assertEquals(result.errors[0].path?.[0], "1");
+  },
+});

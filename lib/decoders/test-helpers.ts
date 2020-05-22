@@ -7,22 +7,24 @@ type TestCase = {
   description: string;
 };
 
-export const runFailureTestCases = (
-  cases: TestCase[]
-): void => {
+export const runFailureTestCases = (cases: TestCase[]): void => {
   cases.forEach(({ decoder, value, description }) => {
-    Deno.test({ name: description, fn: () => {
-      assertEquals(decoder.decode(value).success, false);
-    } });
+    Deno.test({
+      name: description,
+      fn: () => {
+        assertEquals(decoder.decode(value).success, false);
+      },
+    });
   });
 };
 
-export const runSuccessTestCases = (
-  cases: TestCase[]
-): void => {
+export const runSuccessTestCases = (cases: TestCase[]): void => {
   cases.forEach(({ decoder, value, description }) => {
-    Deno.test({ name: description, fn: () => {
-      assertEquals(decoder.decode(value).success, true);
-    } });
+    Deno.test({
+      name: description,
+      fn: () => {
+        assertEquals(decoder.decode(value).success, true);
+      },
+    });
   });
 };

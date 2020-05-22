@@ -1,6 +1,6 @@
 import { assertEquals } from "../../test-deps.ts";
 import { runSuccessTestCases, runFailureTestCases } from "./test-helpers.ts";
-import { Success } from "../types.ts";
+import { Success, Failure } from "../types.ts";
 import { type } from "./type.ts";
 import { string } from "./string.ts";
 import { number } from "./number.ts";
@@ -202,5 +202,40 @@ Deno.test({
     assertEquals(result.success, true);
     assertEquals(result.value.age, undefined);
     assertEquals(result.value.address.zipCode, undefined);
+  },
+});
+
+Deno.test({
+  name: "type: should add error path information",
+  fn: () => {
+    const decoder = type({
+      name: string(),
+      age: number(),
+      addresses: array(
+        type({
+          street: string(),
+          city: string(),
+        })
+      ),
+    });
+
+    const result = decoder.decode({
+      name: "Ronald",
+      age: "99",
+      addresses: [
+        {
+          street: "High street",
+          city: "Someplace",
+        },
+        {
+          street: "Low street",
+          city: 2000,
+        },
+      ],
+    }) as Failure;
+
+    assertEquals(result.errors.length, 2);
+    assertEquals(result.errors[0].path, ["age"]);
+    assertEquals(result.errors[1].path, ["addresses", "1", "city"]);
   },
 });
