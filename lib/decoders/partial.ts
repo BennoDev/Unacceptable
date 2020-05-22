@@ -1,9 +1,9 @@
 import {
   DecodeResult,
   IDecoder,
-  ValidationError,
-  Literal,
   TypeOf,
+  Literal,
+  ValidationError,
 } from "../types.ts";
 import { Decoder } from "../decoder.ts";
 import { failure, success, isFailure } from "../result.ts";
@@ -12,17 +12,19 @@ type TypeOfProps<Props extends Record<string, IDecoder<any>>> = {
   [Key in keyof Props]: TypeOf<Props[Key]>;
 };
 
-class TypeDecoder<Props extends Record<string, IDecoder<any>>> extends Decoder<
+class PartialDecoder<
+  Props extends Record<string, IDecoder<any>>
+> extends Decoder<
   // Can't use TypeOfProps here, as this type is treated different as an inline type declaration and results in incorrect inferrence
   {
-    [Key in keyof Props]: TypeOf<Props[Key]>;
+    [Key in keyof Props]?: TypeOf<Props[Key]>;
   }
 > {
   constructor(private readonly decoders: Props) {
     super();
   }
 
-  decode(value: unknown): DecodeResult<TypeOfProps<Props>> {
+  decode(value: unknown): DecodeResult<Partial<TypeOfProps<Props>>> {
     if (typeof value !== "object" || value === null || Array.isArray(value)) {
       return failure([
         { message: "Given value is not an object", name: "object", value },
@@ -34,25 +36,27 @@ class TypeDecoder<Props extends Record<string, IDecoder<any>>> extends Decoder<
 
   private decodeObject(
     value: Record<Literal, unknown>
-  ): DecodeResult<TypeOfProps<Props>> {
+  ): DecodeResult<Partial<TypeOfProps<Props>>> {
     const clone: Record<Literal, unknown> = {};
     const errors: ValidationError[] = [];
 
     for (const [key, decoder] of Object.entries(this.decoders)) {
-      const result = decoder.decode(value[key]);
-      if (isFailure(result)) {
-        errors.push(...this.withPath(result.errors, key));
-      } else {
-        clone[key] = result.value;
+      if (typeof value[key] !== "undefined") {
+        const result = decoder.decode(value[key]);
+        if (isFailure(result)) {
+          errors.push(...this.withPath(result.errors, key));
+        } else {
+          clone[key] = value;
+        }
       }
     }
 
     return errors.length > 0
       ? failure(errors)
-      : success(clone as TypeOfProps<Props>);
+      : success(clone as Partial<TypeOfProps<Props>>);
   }
 }
 
-export const type = <Props extends Record<string, IDecoder<any>>>(
+export const partial = <Props extends Record<string, IDecoder<any>>>(
   decoders: Props
-) => new TypeDecoder(decoders);
+) => new PartialDecoder(decoders);

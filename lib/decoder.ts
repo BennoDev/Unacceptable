@@ -2,7 +2,7 @@ import {
   ValidationRule,
   ValidationError,
   IDecoder,
-  DecodeResult
+  DecodeResult,
 } from "./types.ts";
 
 export abstract class Decoder<Type> implements IDecoder<Type> {
@@ -17,12 +17,8 @@ export abstract class Decoder<Type> implements IDecoder<Type> {
     const errorswithPath: ValidationError[] = [];
 
     for (const error of errors) {
-      const path = Array.isArray(error.path)
-        ? [part, ...error.path]
-        : [part];
-      errorswithPath.push(
-        { ...error, path }
-      );
+      const path = Array.isArray(error.path) ? [part, ...error.path] : [part];
+      errorswithPath.push({ ...error, path });
     }
 
     return errorswithPath;
@@ -57,12 +53,8 @@ export abstract class DecoderWithRules<Type> implements IDecoder<Type> {
     const errorswithPath: ValidationError[] = [];
 
     for (const error of errors) {
-      const path = Array.isArray(error.path)
-        ? [part, ...error.path]
-        : [part];
-      errorswithPath.push(
-        { ...error, path }
-      );
+      const path = Array.isArray(error.path) ? [part, ...error.path] : [part];
+      errorswithPath.push({ ...error, path });
     }
 
     return errorswithPath;
