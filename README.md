@@ -20,12 +20,13 @@ V1.0
 
 - go over all testing
   - extra test cases (general, not specific)
+- write documentation
+- supply comments for all code (especially public APIs)
 - see if possible to hide `__TYPE__`
 - performance testing
   - rewrite all map / filter / find / reduce to loops for performance
   - remove spread operator and use concat
-- supply comments for all code (especially public APIs)
-- write documentation
+  - maybe look into memoization?
 
 V1.1 (TBD)
 
