@@ -1,5 +1,5 @@
 import { IDecoder, ValidationError, DecodeResult, Infer } from "../types.ts";
-import { failure, success, isFailure, isSuccess } from "../result.ts";
+import { failure, success, isSuccess } from "../result.ts";
 import { DecoderWithRules } from "../decoder.ts";
 
 class ArrayDecoder<

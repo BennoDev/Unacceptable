@@ -5,7 +5,6 @@ import { type } from "./type.ts";
 import { string } from "./string.ts";
 import { number } from "./number.ts";
 import { array } from "./array.ts";
-import { Infer, Success } from "../types.ts";
 import { isSuccess } from "../result.ts";
 
 runSuccessTestCases([
