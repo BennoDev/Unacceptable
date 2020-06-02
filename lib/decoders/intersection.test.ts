@@ -1,9 +1,12 @@
 import { runSuccessTestCases, runFailureTestCases } from "./test-helpers.ts";
+import { assertEquals } from "../../test-deps.ts";
 import { intersection } from "./intersection.ts";
 import { type } from "./type.ts";
 import { string } from "./string.ts";
 import { number } from "./number.ts";
 import { array } from "./array.ts";
+import { TypeOf, Success } from "../types.ts";
+import { isSuccess } from "../result.ts";
 
 runSuccessTestCases([
   {
@@ -157,3 +160,122 @@ runFailureTestCases([
     },
   },
 ]);
+
+Deno.test({
+  name: "intersection: should merge decoded for complex structures",
+  fn: () => {
+    const tracking = type({
+      visits: number(),
+      amountSpent: number(),
+    });
+    const timestamps = type({
+      createdAt: string(),
+      updatedAt: string(),
+    });
+    const newProfile = type({
+      firstName: string(),
+      lastName: string(),
+      addresses: array(
+        type({
+          street: string(),
+          city: string(),
+        })
+      ),
+      meta: intersection([tracking, timestamps]),
+    });
+    const oldProfile = type({
+      age: number(),
+      employment: type({
+        salary: number(),
+        title: string(),
+      }),
+      addresses: array(
+        type({
+          street: string(),
+          zipcode: number(),
+        })
+      ),
+      meta: tracking,
+    });
+
+    const profile = intersection([newProfile, oldProfile]);
+    const result = profile.decode({
+      firstName: "Ronald",
+      lastName: "McDonald",
+      addresses: [
+        {
+          street: "High street",
+          city: "Somewhere",
+          zipcode: 2000,
+        },
+      ],
+      age: 82,
+      employment: {
+        salary: 100000000,
+        title: "Clown",
+      },
+      meta: {
+        visits: 200,
+        amountSpent: 1250,
+        createdAt: "20-10-2020",
+        updatedAt: "15-05-2021",
+      },
+      pleaseOmit: "Yes",
+    });
+
+    assertEquals(isSuccess(result), true);
+    assertEquals((result as any).value, {
+      firstName: "Ronald",
+      lastName: "McDonald",
+      addresses: [
+        {
+          street: "High street",
+          city: "Somewhere",
+          zipcode: 2000,
+        },
+      ],
+      age: 82,
+      employment: {
+        salary: 100000000,
+        title: "Clown",
+      },
+      meta: {
+        visits: 200,
+        amountSpent: 1250,
+        createdAt: "20-10-2020",
+        updatedAt: "15-05-2021",
+      },
+    });
+  },
+});
+
+Deno.test({
+  name: "intersection: should merge decoded properly for arrays",
+  fn: () => {
+    const decoder = intersection([
+      array(type({ key: string() })),
+      array(type({ key2: number() })),
+    ]);
+    const result = decoder.decode([
+      { key: "hey", key2: 3, key3: "4" },
+      { key: "bud", key2: 12 },
+    ]);
+
+    assertEquals(isSuccess(result), true);
+    assertEquals((result as any).value, [
+      { key: "hey", key2: 3 },
+      { key: "bud", key2: 12 },
+    ]);
+  },
+});
+
+Deno.test({
+  name: "intersection: should properly handle decoded literals",
+  fn: () => {
+    const decoder = intersection([string(), string()]);
+    const result = decoder.decode("123");
+
+    assertEquals(isSuccess(result), true);
+    assertEquals((result as any).value, "123");
+  },
+});

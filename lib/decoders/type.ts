@@ -6,7 +6,7 @@ import {
   TypeOf,
 } from "../types.ts";
 import { Decoder } from "../decoder.ts";
-import { failure, success, isFailure } from "../result.ts";
+import { failure, success, isSuccess } from "../result.ts";
 
 type TypeOfProps<Props extends Record<string, IDecoder<any>>> = {
   [Key in keyof Props]: TypeOf<Props[Key]>;
@@ -35,21 +35,21 @@ class TypeDecoder<Props extends Record<string, IDecoder<any>>> extends Decoder<
   private decodeObject(
     value: Record<Literal, unknown>
   ): DecodeResult<TypeOfProps<Props>> {
-    const clone: Record<Literal, unknown> = {};
+    const decoded: Record<Literal, unknown> = {};
     const errors: ValidationError[] = [];
 
     for (const [key, decoder] of Object.entries(this.decoders)) {
       const result = decoder.decode(value[key]);
-      if (isFailure(result)) {
-        errors.push(...this.withPath(result.errors, key));
+      if (isSuccess(result)) {
+        decoded[key] = result.value;
       } else {
-        clone[key] = result.value;
+        errors.push(...this.withPath(result.errors, key));
       }
     }
 
     return errors.length > 0
       ? failure(errors)
-      : success(clone as TypeOfProps<Props>);
+      : success(decoded as TypeOfProps<Props>);
   }
 }
 

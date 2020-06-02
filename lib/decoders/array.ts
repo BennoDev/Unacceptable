@@ -1,11 +1,10 @@
 import { IDecoder, ValidationError, DecodeResult, TypeOf } from "../types.ts";
-import { failure, success, isFailure } from "../result.ts";
+import { failure, success, isFailure, isSuccess } from "../result.ts";
 import { DecoderWithRules } from "../decoder.ts";
 
-class ArrayDecoder<ElementDecoder extends IDecoder<any>>
-  extends DecoderWithRules<
-    Array<TypeOf<ElementDecoder>>
-  > {
+class ArrayDecoder<
+  ElementDecoder extends IDecoder<any>
+> extends DecoderWithRules<Array<TypeOf<ElementDecoder>>> {
   constructor(private readonly elementDecoder: ElementDecoder) {
     super();
   }
@@ -15,26 +14,28 @@ class ArrayDecoder<ElementDecoder extends IDecoder<any>>
       return failure([{ message: "Value is not an array", value }]);
     }
 
-    const elementErrors = this.decodeElements(value);
+    const decodedElements: Array<TypeOf<ElementDecoder>> = [];
+    const elementErrors: ValidationError[] = [];
+
+    for (const [index, element] of value.entries()) {
+      const result = this.elementDecoder.decode(element);
+      if (isSuccess(result)) {
+        decodedElements.push(result.value);
+      } else {
+        elementErrors.push(...this.withPath(result.errors, index.toString()));
+      }
+    }
+
     if (elementErrors.length > 0) {
       return failure(elementErrors);
     }
 
-    const ruleErrors = this.validateRules(value);
+    const ruleErrors = this.validateRules(decodedElements);
     if (ruleErrors.length > 0) {
       return failure(ruleErrors);
     }
 
-    return success(value);
-  }
-
-  private decodeElements(value: unknown[]): ValidationError[] {
-    return value.reduce<ValidationError[]>((errors, val, index) => {
-      const result = this.elementDecoder.decode(val);
-      return isFailure(result)
-        ? [...errors, ...this.withPath(result.errors, index.toString())]
-        : errors;
-    }, []);
+    return success(decodedElements);
   }
 }
 

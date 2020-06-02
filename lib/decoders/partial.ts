@@ -6,7 +6,7 @@ import {
   ValidationError,
 } from "../types.ts";
 import { Decoder } from "../decoder.ts";
-import { failure, success, isFailure } from "../result.ts";
+import { failure, success, isSuccess } from "../result.ts";
 
 type TypeOfProps<Props extends Record<string, IDecoder<any>>> = {
   [Key in keyof Props]: TypeOf<Props[Key]>;
@@ -37,23 +37,23 @@ class PartialDecoder<
   private decodeObject(
     value: Record<Literal, unknown>
   ): DecodeResult<Partial<TypeOfProps<Props>>> {
-    const clone: Record<Literal, unknown> = {};
+    const decoded: Record<Literal, unknown> = {};
     const errors: ValidationError[] = [];
 
     for (const [key, decoder] of Object.entries(this.decoders)) {
       if (typeof value[key] !== "undefined") {
         const result = decoder.decode(value[key]);
-        if (isFailure(result)) {
-          errors.push(...this.withPath(result.errors, key));
+        if (isSuccess(result)) {
+          decoded[key] = result.value;
         } else {
-          clone[key] = value;
+          errors.push(...this.withPath(result.errors, key));
         }
       }
     }
 
     return errors.length > 0
       ? failure(errors)
-      : success(clone as Partial<TypeOfProps<Props>>);
+      : success(decoded as Partial<TypeOfProps<Props>>);
   }
 }
 

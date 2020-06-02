@@ -1,6 +1,6 @@
-import { IDecoder, ValidationError, TypeOf } from "../types.ts";
+import { IDecoder, ValidationError, TypeOf, DecodeResult } from "../types.ts";
 import { Decoder } from "../decoder.ts";
-import { failure, success, isFailure } from "../result.ts";
+import { failure, success, isSuccess } from "../result.ts";
 
 type Intersection<Union> = (
   Union extends any ? (k: Union) => void : never
@@ -15,18 +15,91 @@ class IntersectionDecoder<
     super();
   }
 
-  decode(value: unknown) {
+  decode(value: unknown): DecodeResult<Intersection<TypeOf<Type[number]>>> {
     const errors: ValidationError[] = [];
-    for (let i = 0; i < this.decoders.length; i++) {
-      const result = this.decoders[i].decode(value);
-      if (isFailure(result)) {
+    const decoded: unknown[] = [];
+
+    for (const decoder of this.decoders) {
+      const result = decoder.decode(value);
+      if (isSuccess(result)) {
+        decoded.push(result.value);
+      } else {
         errors.push(...result.errors);
       }
     }
 
-    return errors.length > 0
-      ? failure(errors)
-      : success(value as Intersection<Type>);
+    if (errors.length > 0) {
+      return failure(errors);
+    }
+
+    const merged =
+      typeof decoded[0] === "object" && decoded !== null
+        ? this.mergeDecoded(decoded)
+        : decoded[0];
+
+    return success(merged as Intersection<TypeOf<Type[number]>>);
+  }
+
+  private mergeDecoded(decoded: unknown[]) {
+    if (decoded[0] === null || typeof decoded[0] !== "object") {
+      return decoded[0];
+    }
+
+    const target = Array.isArray(decoded[0]) ? [] : {};
+    for (const one of decoded) {
+      this.assign(target, one as object);
+    }
+    return target;
+  }
+
+  private assign(
+    target: Record<string, any>,
+    source: object
+  ): Record<string, unknown> {
+    Object.entries(source).forEach(([key, value]) => {
+      // Primitive or null
+      if (value === null || typeof value !== "object") {
+        target[key] = value;
+        return;
+      }
+
+      // Array
+      if (Array.isArray(value)) {
+        if (!Array.isArray(target[key])) {
+          target[key] = [];
+        }
+
+        value.forEach((element, index) => {
+          if (element === null || typeof element !== "object") {
+            target[key][index] = element;
+          } else {
+            if (Array.isArray(element) && !Array.isArray(target[key][index])) {
+              target[key][index] = [];
+            } else if (
+              target[key][index] === null ||
+              typeof target[key][index] !== "object"
+            ) {
+              target[key][index] = {};
+            }
+
+            this.assign(target[key][index], element);
+          }
+          return;
+        });
+      }
+
+      // Object
+      if (!Array.isArray(value) && typeof value === "object") {
+        if (target[key] === null || typeof target[key] !== "object") {
+          target[key] = {};
+        }
+        this.assign(target[key], value);
+      }
+
+      return;
+    });
+
+    return target;
   }
 }
 

@@ -1,11 +1,12 @@
 import { ValidationError, TypeOf, IDecoder, DecodeResult } from "../types.ts";
 import { Decoder } from "../decoder.ts";
-import { failure, isFailure, success } from "../result.ts";
+import { failure, success, isSuccess } from "../result.ts";
 
 type TupleDecoders = [IDecoder<any>, ...IDecoder<any>[]];
 
 type TupleType<Type extends TupleDecoders> = {
-  [Key in keyof Type]: Type[Key] extends IDecoder<any> ? TypeOf<Type[Key]>
+  [Key in keyof Type]: Type[Key] extends IDecoder<any>
+    ? TypeOf<Type[Key]>
     : never;
 };
 
@@ -22,8 +23,8 @@ class TupleDecoder<Type extends TupleDecoders> extends Decoder<
         {
           message: "Given value is not an array | tuple",
           name: "tuple",
-          value
-        }
+          value,
+        },
       ]);
     }
 
@@ -32,31 +33,28 @@ class TupleDecoder<Type extends TupleDecoders> extends Decoder<
         {
           message: "Given value is not correct tuple length",
           name: "tuple",
-          value
-        }
+          value,
+        },
       ]);
     }
 
-    const errors = this.decodeElements(value);
-    return errors.length > 0
-      ? failure(errors)
-      : success(value as TupleType<Type>);
-  }
-
-  private decodeElements(value: unknown[]): ValidationError[] {
     const errors: ValidationError[] = [];
+    const decoded: unknown[] = [];
 
-    for (let i = 0; i < this.decoders.length; i++) {
-      const result = this.decoders[i].decode(value[i]);
-      if (isFailure(result)) {
-        errors.push(...result.errors);
+    for (const [index, decoder] of this.decoders.entries()) {
+      const result = decoder.decode(value[index]);
+      if (isSuccess(result)) {
+        decoded.push(result.value);
+      } else {
+        errors.push(...this.withPath(result.errors, index.toString()));
       }
     }
 
-    return errors;
+    return errors.length > 0
+      ? failure(errors)
+      : success(decoded as TupleType<Type>);
   }
 }
 
-export const tuple = <Type extends TupleDecoders>(
-  decoders: Type
-) => new TupleDecoder(decoders);
+export const tuple = <Type extends TupleDecoders>(decoders: Type) =>
+  new TupleDecoder(decoders);

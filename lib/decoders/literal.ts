@@ -11,13 +11,12 @@ class LiteralDecoder<Type extends Literal> extends Decoder<Type> {
     return value === this.literal
       ? success(value as Type)
       : failure([
-        {
-          message: `Given value ${value} is not equal to expected: ${this
-            .__TYPE__}`,
-          name: literal.toString(),
-          value
-        }
-      ]);
+          {
+            message: `Given value ${value} is not equal to expected: ${this.__TYPE__}`,
+            name: literal.toString(),
+            value,
+          },
+        ]);
   }
 }
 

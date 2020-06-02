@@ -1,16 +1,15 @@
 import { ValidationError, DecodeResult, IDecoder } from "../types.ts";
 import { DecoderWithRules } from "../decoder.ts";
-import { failure, success, isFailure } from "../result.ts";
-import { string } from "./string.ts";
+import { failure, success, isSuccess } from "../result.ts";
 
-class RecordDecoder<TValue = unknown> extends DecoderWithRules<
-  Record<string, TValue>
+class RecordDecoder<Value = unknown> extends DecoderWithRules<
+  Record<string, Value>
 > {
-  constructor(private readonly valueDecoder: IDecoder<TValue>) {
+  constructor(private readonly valueDecoder: IDecoder<Value>) {
     super();
   }
 
-  decode(value: unknown): DecodeResult<Record<string, TValue>> {
+  decode(value: unknown): DecodeResult<Record<string, Value>> {
     if (
       typeof value !== "object" ||
       value === null ||
@@ -20,38 +19,36 @@ class RecordDecoder<TValue = unknown> extends DecoderWithRules<
         {
           message: "Given value is not a non-empty object",
           name: "record",
-          value
-        }
+          value,
+        },
       ]);
     }
 
-    const recordShapeErrors = this.validateRecordShape(value);
-    if (recordShapeErrors.length > 0) {
-      return failure(recordShapeErrors);
+    const decoded: Record<string, Value> = {};
+    const shapeErrors: ValidationError[] = [];
+
+    for (const [key, property] of Object.entries(value)) {
+      const result = this.valueDecoder.decode(property);
+      if (isSuccess(result)) {
+        decoded[key] = result.value;
+      } else {
+        shapeErrors.push(...this.withPath(result.errors, key));
+      }
     }
 
-    // From now on we can safely cast to Record<string, TValue> since we verified this with `validateRecordShape`.
-    const ruleErrors = this.validateRules(value as Record<string, TValue>);
+    if (shapeErrors.length > 0) {
+      return failure(shapeErrors);
+    }
+
+    // From now on we can safely cast to Record<string, Value> since we verified this with `validateRecordShape`.
+    const ruleErrors = this.validateRules(decoded);
     if (ruleErrors.length > 0) {
       return failure(ruleErrors);
     }
 
-    return success(value as Record<string, TValue>);
-  }
-
-  private validateRecordShape(value: object): ValidationError[] {
-    return Object.entries(value).reduce<ValidationError[]>(
-      (errors, [key, value]) => {
-        const result = this.valueDecoder.decode(value);
-        if (isFailure(result)) {
-          errors.push(...this.withPath(result.errors, key));
-        }
-        return errors;
-      },
-      []
-    );
+    return success(decoded);
   }
 }
 
-export const record = <TValue>(valueDecoder: IDecoder<TValue>) =>
+export const record = <Value>(valueDecoder: IDecoder<Value>) =>
   new RecordDecoder(valueDecoder);
