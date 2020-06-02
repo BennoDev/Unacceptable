@@ -8,7 +8,7 @@ export {
 } from "./lib/types.ts";
 
 // Decoders
-export { isSuccess, isFailure } from "./lib/result.ts";
+export { isSuccess, isFailure, success, failure } from "./lib/result.ts";
 export { Decoder, DecoderWithRules } from "./lib/decoder.ts";
 
 import { any } from "./lib/decoders/any.ts";
@@ -28,6 +28,9 @@ import { undefinedDecoder } from "./lib/decoders/undefined.ts";
 import { union } from "./lib/decoders/union.ts";
 import { unknown } from "./lib/decoders/unknown.ts";
 
+/**
+ * Object containing all the possible base validators.
+ */
 export const d = {
   any,
   array,

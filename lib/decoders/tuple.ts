@@ -56,5 +56,15 @@ class TupleDecoder<Type extends TupleDecoders> extends Decoder<
   }
 }
 
+/**
+ * Creates a decoder that decodes a tuple, where a decoder is defined for each index,
+ * and the value at every index will be decoded using the respective decoder.
+ * Infers to `[decoders[0] | decoders[1]]`.
+ * @param decoders List of decoders that will be executed by index.
+ * @example
+ * const decoder = tuple([string(), number()])
+ * type Tuple = TypeOf<typeof decoder>
+ * // Tuple = [string, number]
+ */
 export const tuple = <Type extends TupleDecoders>(decoders: Type) =>
   new TupleDecoder(decoders);

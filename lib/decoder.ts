@@ -8,6 +8,10 @@ import {
 export abstract class Decoder<Type> implements IDecoder<Type> {
   readonly __TYPE__!: Type;
 
+  /**
+   * Decodes the given value, returns either a Success or Failure result.
+   * @param value Value to decode
+   */
   abstract decode(value: unknown): DecodeResult<Type>;
 
   protected withPath(

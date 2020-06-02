@@ -8,4 +8,8 @@ class AnyDecoder extends Decoder<any> {
   }
 }
 
+/**
+ * Creates a decoder whose result will infer to `any`.
+ * This decoder will **always** return a successful result.
+ */
 export const any = () => new AnyDecoder();

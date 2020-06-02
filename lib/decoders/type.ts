@@ -53,6 +53,18 @@ class TypeDecoder<Props extends Record<string, IDecoder<any>>> extends Decoder<
   }
 }
 
+/**
+ * Decodes a defined object with the given decoders, properties that do not have a decoder
+ * defined will be stripped from the result. Infers the result to an object with the shape and the types of the given decoders.
+ * @param decoders Shape of the object to be decoded, and the decoders for each property.
+ * @example
+ * const decoder = type({
+ *   firstName: string(),
+ *   lastnName: string()
+ * });
+ * type Name = TypeOf<typeof decoder>;
+ * // Name = { firstName: string, lastName: string }
+ */
 export const type = <Props extends Record<string, IDecoder<any>>>(
   decoders: Props
 ) => new TypeDecoder(decoders);

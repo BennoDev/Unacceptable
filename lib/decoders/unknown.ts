@@ -8,4 +8,8 @@ class UnknownDecoder extends Decoder<unknown> {
   }
 }
 
+/**
+ * Creates a decoder whose result will infer to `unknown`.
+ * This decoder will **always** return a successful result.
+ */
 export const unknown = () => new UnknownDecoder();

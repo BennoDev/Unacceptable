@@ -57,6 +57,19 @@ class PartialDecoder<
   }
 }
 
+/**
+ * Decodes a defined object with the given decoders, properties that do not have a decoder defined
+ * will be stripped from the result. Infers the result to an object with the shape and the types of the given decoders.
+ * Properties that are undefined will not cause the decoding to fail, essentially partial makes each property optional.
+ * @param decoders Shape of the object to be decoded, and the decoders for each property.
+ * @example
+ * const decoder = partial({
+ *   name: string(),
+ *   age: number(),
+ * })
+ * type CustomPartial = TypeOf<typeof decoder>;
+ * // CustomPartial = { name: string | undefined, age: string | undefined }.
+ */
 export const partial = <Props extends Record<string, IDecoder<any>>>(
   decoders: Props
 ) => new PartialDecoder(decoders);

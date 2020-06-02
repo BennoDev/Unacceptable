@@ -50,5 +50,15 @@ class RecordDecoder<Value = unknown> extends DecoderWithRules<
   }
 }
 
+/**
+ * Creates a decoder for an object whose keys are not necessarily known, each value will be decoded
+ * using the passed decoder argument. For arrays, use the array decoder as arrays will result in a `Failure` result.
+ * Infers to a `Record<string, TypeOf<typeof decoder>>`
+ * @param valueDecoder Decoder that will be executed for each value in the object.
+ * @example
+ * const decoder = record(number());
+ * type CustomRecord = TypeOf<typeof decoder>;
+ * // CustomRecord = Record<string, number>
+ */
 export const record = <Value>(valueDecoder: IDecoder<Value>) =>
   new RecordDecoder(valueDecoder);

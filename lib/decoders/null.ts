@@ -7,13 +7,16 @@ class NullDecoder extends Decoder<null> {
     return value === null
       ? success(value)
       : failure([
-        {
-          message: "Given value is not null or undefined",
-          name: "null",
-          value
-        }
-      ]);
+          {
+            message: "Given value is not null or undefined",
+            name: "null",
+            value,
+          },
+        ]);
   }
 }
 
+/**
+ * Creates a decoder for null values, infers to `null`.
+ */
 export const nullDecoder = () => new NullDecoder();

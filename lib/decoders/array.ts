@@ -39,6 +39,10 @@ class ArrayDecoder<
   }
 }
 
+/**
+ * Creates a decoder for an array, type will infer to `Array<TypeOfDecoder>` depending on the decoder passed as argument
+ * @param decoder Decoder for the array's elements, will be invoked for each.
+ */
 export const array = <ElementDecoder extends IDecoder<any>>(
   decoder: ElementDecoder
 ) => new ArrayDecoder(decoder);

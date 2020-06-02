@@ -249,7 +249,6 @@ Deno.test({
       const result: any = CreateContentRequest.decode(request);
       assertEquals(result.success, true);
       assertEquals(result.value, request);
-      console.log(result.value);
     });
   },
 });

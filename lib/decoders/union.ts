@@ -30,6 +30,16 @@ class UnionDecoder<
   }
 }
 
+/**
+ * Creates a decoder that requires the decoded value to result in `Success`
+ * in atleast one of the passed decoders. The response will be the result of the first successful decode or a failure if none
+ * were successful.
+ * @param decoders List of decoders that will can be run
+ * @example
+ * const decoder = union([literal("401"), literal("404")]);
+ * type ErrorCodes = TypeOf<typeof decoder>;
+ * // ErrorCodes = "401" | "404"
+ */
 export const union = <
   Type extends [IDecoder<any>, IDecoder<any>, ...IDecoder<any>[]]
 >(

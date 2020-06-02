@@ -6,7 +6,7 @@ class StringDecoder extends DecoderWithRules<string> {
   decode(value: unknown): DecodeResult<string> {
     if (typeof value !== "string") {
       return failure([
-        { message: "Given value is not a string", name: "string", value }
+        { message: "Given value is not a string", name: "string", value },
       ]);
     }
 
@@ -15,4 +15,7 @@ class StringDecoder extends DecoderWithRules<string> {
   }
 }
 
+/**
+ * Creates a decoder for strings, infers to `string`.
+ */
 export const string = () => new StringDecoder();

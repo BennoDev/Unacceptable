@@ -6,7 +6,7 @@ class NumberDecoder extends DecoderWithRules<number> {
   decode(value: unknown): DecodeResult<number> {
     if (typeof value !== "number") {
       return failure([
-        { message: "Given value is not a valid number", name: "number", value }
+        { message: "Given value is not a valid number", name: "number", value },
       ]);
     }
 
@@ -15,4 +15,7 @@ class NumberDecoder extends DecoderWithRules<number> {
   }
 }
 
+/**
+ * Creates a decoder for numbers, infers to `number`.
+ */
 export const number = () => new NumberDecoder();
