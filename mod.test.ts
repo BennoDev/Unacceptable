@@ -2,6 +2,7 @@
  * Every decoder is individually tested inside the source code, this file serves to provide
  * some real world scenario's testing how various parts / decoders work together.
  */
+import { assertEquals } from "./test-deps.ts";
 import { d, TypeOf, IDecoder } from "./mod.ts";
 
 const rules = {
@@ -52,6 +53,7 @@ const cd = {
     d.union([decoder, d.undefined()]),
 };
 
+//#region CreateUserRequest
 const CreateUserRequest = d.type({
   firstName: cd.optional(cd.shortText),
   lastName: cd.optional(cd.shortText),
@@ -74,20 +76,84 @@ const CreateUserRequest = d.type({
 });
 type CreateUserRequest = TypeOf<typeof CreateUserRequest>;
 
-const userRequest: CreateUserRequest = {
-  email: "Best@mail.com",
-  firstName: "Berno",
-  lastName: "Mjejsmans",
-  role: "ADMIN",
-  addresses: [
-    {
-      city: "Mechelen",
-      zipCode: 2800,
-      street: "",
-    },
-  ],
-};
+Deno.test({
+  name: "CreateUserRequest: success",
+  fn: () => {
+    const requests = [
+      {
+        firstName: "Ronald",
+        lastName: "McDonald",
+        email: "ronald_mcdonald@mail.com",
+        role: "ADMIN",
+        addresses: [
+          {
+            city: "Someplace",
+            street: "Best street one",
+            zipCode: 2000,
+          },
+        ],
+      },
+      {
+        firstName: "Ronald",
+        lastName: "McDonald",
+        email: "ronald_mcdonald@mail.com",
+        role: "ADMIN",
+        addresses: undefined,
+      },
+    ];
 
+    requests.forEach((request) => {
+      // Using any so I don't have to use the type guards in this test
+      const result: any = CreateUserRequest.decode(request);
+      assertEquals(result.success, true);
+      assertEquals(result.value, request);
+    });
+  },
+});
+
+Deno.test({
+  name: "CreateUserRequest: failure",
+  fn: () => {
+    const requests = [
+      {
+        firstName: "Ronald",
+        lastName: "McDonald",
+        email: "ronald_mcdonald@mail.com",
+        role: "SOME_DUDE",
+        addresses: [
+          {
+            city: "Someplace",
+            street: "Best street one",
+            zipCode: 2000,
+          },
+        ],
+      },
+      {
+        firstName: "Ronald",
+        lastName: "McDonald",
+        email: "ronald_mcdonald@mail.com",
+        role: "ADMIN",
+        addresses: [
+          {
+            city: "Someplace",
+            street: "Best street one",
+          },
+        ],
+      },
+    ];
+
+    requests.forEach((request) => {
+      // Using any so I don't have to use the type guards in this test
+      const result: any = CreateUserRequest.decode(request);
+      assertEquals(result.success, false);
+      assertEquals(Array.isArray(result.errors), true);
+    });
+  },
+});
+
+//#endregion
+
+//#region CreateContentRequest
 const Publishable = d.type({
   publishDate: cd.dateString,
   isPlanned: d.boolean(),
@@ -126,24 +192,146 @@ const CreateContentRequest = d.type({
 });
 type CreateContentRequest = TypeOf<typeof CreateContentRequest>;
 
-const contentRequest: CreateContentRequest = {
-  type: "ACTION",
-  data: {
-    content: "Content",
-    summary: "Summary",
-    title: "Title",
-    publish: {
-      isPlanned: true,
-      publishDate: new Date().toISOString(),
-      notifyWhenPublished: false,
-    },
-    social: [
+Deno.test({
+  name: "CreateContentRequest: success",
+  fn: () => {
+    const requests = [
       {
-        type: "FACEBOOK",
-        url: "https://www.facebook.com",
+        type: "ACTION",
+        data: {
+          title: "Action title!",
+          summary: "We're gonna do something",
+          content: "Fight the power boys and girls",
+          publish: {
+            isPlanned: true,
+            publishDate: new Date().toISOString(),
+            notifyWhenPublished: true,
+          },
+          social: [
+            {
+              type: "FACEBOOK",
+              url: "https://www.facebook.com/sharelink",
+            },
+          ],
+        },
       },
-    ],
-  },
-};
+      {
+        type: "VIDEO",
+        data: {
+          title: "Video title!",
+          summary: "We're gonna play something",
+          content: "Fight the power boys and girls",
+          publish: {
+            isPlanned: true,
+            publishDate: new Date().toISOString(),
+            notifyWhenPublished: true,
+          },
+          social: [
+            {
+              type: "FACEBOOK",
+              url: "https://www.facebook.com/sharelink",
+            },
+            {
+              type: "LINKED_IN",
+              url: "https://www.linkedin.com/sharelink",
+            },
+            {
+              type: "TWITTER",
+              url: "https://www.twitter.com/sharelink",
+            },
+          ],
+        },
+      },
+    ];
 
-const result = CreateContentRequest.decode(contentRequest);
+    requests.forEach((request) => {
+      // Using any so I don't have to use the type guards in this test
+      const result: any = CreateContentRequest.decode(request);
+      assertEquals(result.success, true);
+      assertEquals(result.value, request);
+      console.log(result.value);
+    });
+  },
+});
+
+Deno.test({
+  name: "CreateContentRequest: failure",
+  fn: () => {
+    const requests = [
+      {
+        type: "ACTION",
+        data: {
+          title: "Action title!",
+          summary: "We're gonna do something",
+          content: "Fight the power boys and girls",
+          publish: {
+            isPlanned: true,
+            publishDate: "05-25-2020T20:16:21.965Z",
+            notifyWhenPublished: true,
+          },
+          social: [
+            {
+              type: "FACEBOOK",
+              url: "https://www.facebook.com/sharelink",
+            },
+          ],
+        },
+      },
+      {
+        type: "VIDEO",
+        data: {
+          title: "Video title!",
+          summary: "We're gonna play something",
+          content: "Fight the power boys and girls",
+          publish: {
+            isPlanned: true,
+            publishDate: new Date().toISOString(),
+            notifyWhenPublished: true,
+          },
+        },
+      },
+    ];
+
+    requests.forEach((request) => {
+      // Using any so I don't have to use the type guards in this test
+      const result: any = CreateContentRequest.decode(request);
+      assertEquals(result.success, false);
+      assertEquals(Array.isArray(result.errors), true);
+    });
+  },
+});
+//#endregion
+
+//#region Errors
+Deno.test({
+  name: "Errors: should correctly return list of errors",
+  fn: () => {
+    const result: any = CreateContentRequest.decode({ type: "TIP", data: {} });
+    assertEquals(result.errors, [
+      {
+        message: "Given value is not a string",
+        name: "string",
+        value: undefined,
+        path: ["data", "title"],
+      },
+      {
+        message: "Given value is not a string",
+        name: "string",
+        value: undefined,
+        path: ["data", "content"],
+      },
+      {
+        message: "Value is not an array",
+        value: undefined,
+        path: ["data", "social"],
+      },
+      {
+        message: "Given value is not an object",
+        name: "object",
+        value: undefined,
+        path: ["data", "publish"],
+      },
+    ]);
+  },
+});
+//#endregion
