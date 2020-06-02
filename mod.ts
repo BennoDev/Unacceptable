@@ -3,7 +3,7 @@ export {
   ValidationError,
   ValidationRule,
   DecodeResult,
-  TypeOf,
+  Infer,
   IDecoder,
 } from "./lib/types.ts";
 

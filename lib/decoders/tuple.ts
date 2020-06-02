@@ -1,4 +1,4 @@
-import { ValidationError, TypeOf, IDecoder, DecodeResult } from "../types.ts";
+import { ValidationError, Infer, IDecoder, DecodeResult } from "../types.ts";
 import { Decoder } from "../decoder.ts";
 import { failure, success, isSuccess } from "../result.ts";
 
@@ -6,7 +6,7 @@ type TupleDecoders = [IDecoder<any>, ...IDecoder<any>[]];
 
 type TupleType<Type extends TupleDecoders> = {
   [Key in keyof Type]: Type[Key] extends IDecoder<any>
-    ? TypeOf<Type[Key]>
+    ? Infer<Type[Key]>
     : never;
 };
 
@@ -63,7 +63,7 @@ class TupleDecoder<Type extends TupleDecoders> extends Decoder<
  * @param decoders List of decoders that will be executed by index.
  * @example
  * const decoder = tuple([string(), number()])
- * type Tuple = TypeOf<typeof decoder>
+ * type Tuple = Infer<typeof decoder>
  * // Tuple = [string, number]
  */
 export const tuple = <Type extends TupleDecoders>(decoders: Type) =>

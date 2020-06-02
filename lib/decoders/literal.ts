@@ -27,7 +27,7 @@ class LiteralDecoder<Type extends Literal> extends Decoder<Type> {
  *
  * @example
  * const decoder = literal("200");
- * type OkStatusCode = TypeOf<typeof decoder>
+ * type OkStatusCode = Infer<typeof decoder>
  * // OkStatusCode = "200"
  */
 export const literal = <Type extends Literal>(value: Type) =>

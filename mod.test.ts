@@ -3,7 +3,7 @@
  * some real world scenario's testing how various parts / decoders work together.
  */
 import { assertEquals } from "./test-deps.ts";
-import { d, TypeOf, IDecoder } from "./mod.ts";
+import { d, Infer, IDecoder } from "./mod.ts";
 
 const rules = {
   url: {
@@ -74,7 +74,7 @@ const CreateUserRequest = d.type({
     d.undefined(),
   ]),
 });
-type CreateUserRequest = TypeOf<typeof CreateUserRequest>;
+type CreateUserRequest = Infer<typeof CreateUserRequest>;
 
 Deno.test({
   name: "CreateUserRequest: success",
@@ -190,7 +190,7 @@ const CreateContentRequest = d.type({
     }),
   ]),
 });
-type CreateContentRequest = TypeOf<typeof CreateContentRequest>;
+type CreateContentRequest = Infer<typeof CreateContentRequest>;
 
 Deno.test({
   name: "CreateContentRequest: success",

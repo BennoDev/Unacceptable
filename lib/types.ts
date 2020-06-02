@@ -90,7 +90,7 @@ export type DecodeResult<Type = unknown> = Success<Type> | Failure;
 export interface IDecoder<Type> {
   /**
    * Avoid using directly, this is the underlying type that is used for
-   * type inferrence. To infer use the `TypeOf<T>` type.
+   * type inferrence. To infer use the `Infer<T>` type.
    */
   readonly __TYPE__: Type;
 
@@ -103,4 +103,4 @@ export interface IDecoder<Type> {
 /**
  * Infers a static type from the given decoder.
  */
-export type TypeOf<Decoder extends IDecoder<any>> = Decoder["__TYPE__"];
+export type Infer<Decoder extends IDecoder<any>> = Decoder["__TYPE__"];

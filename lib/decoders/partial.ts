@@ -1,7 +1,7 @@
 import {
   DecodeResult,
   IDecoder,
-  TypeOf,
+  Infer,
   Literal,
   ValidationError,
 } from "../types.ts";
@@ -9,7 +9,7 @@ import { Decoder } from "../decoder.ts";
 import { failure, success, isSuccess } from "../result.ts";
 
 type TypeOfProps<Props extends Record<string, IDecoder<any>>> = {
-  [Key in keyof Props]: TypeOf<Props[Key]>;
+  [Key in keyof Props]: Infer<Props[Key]>;
 };
 
 class PartialDecoder<
@@ -17,7 +17,7 @@ class PartialDecoder<
 > extends Decoder<
   // Can't use TypeOfProps here, as this type is treated different as an inline type declaration and results in incorrect inferrence
   {
-    [Key in keyof Props]?: TypeOf<Props[Key]>;
+    [Key in keyof Props]?: Infer<Props[Key]>;
   }
 > {
   constructor(private readonly decoders: Props) {
@@ -67,7 +67,7 @@ class PartialDecoder<
  *   name: string(),
  *   age: number(),
  * })
- * type CustomPartial = TypeOf<typeof decoder>;
+ * type CustomPartial = Infer<typeof decoder>;
  * // CustomPartial = { name: string | undefined, age: string | undefined }.
  */
 export const partial = <Props extends Record<string, IDecoder<any>>>(

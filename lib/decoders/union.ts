@@ -1,4 +1,4 @@
-import { IDecoder, DecodeResult, TypeOf } from "../types.ts";
+import { IDecoder, DecodeResult, Infer } from "../types.ts";
 import { Decoder } from "../decoder.ts";
 import { failure, isSuccess } from "../result.ts";
 
@@ -7,12 +7,12 @@ import { failure, isSuccess } from "../result.ts";
  */
 class UnionDecoder<
   Type extends [IDecoder<any>, IDecoder<any>, ...IDecoder<any>[]]
-> extends Decoder<TypeOf<Type[number]>> {
+> extends Decoder<Infer<Type[number]>> {
   constructor(private readonly decoders: Type) {
     super();
   }
 
-  decode(value: unknown): DecodeResult<TypeOf<Type[number]>> {
+  decode(value: unknown): DecodeResult<Infer<Type[number]>> {
     for (const decoder of this.decoders) {
       const result = decoder.decode(value);
       if (isSuccess(result)) {
@@ -37,7 +37,7 @@ class UnionDecoder<
  * @param decoders List of decoders that will can be run
  * @example
  * const decoder = union([literal("401"), literal("404")]);
- * type ErrorCodes = TypeOf<typeof decoder>;
+ * type ErrorCodes = Infer<typeof decoder>;
  * // ErrorCodes = "401" | "404"
  */
 export const union = <

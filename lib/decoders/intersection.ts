@@ -1,4 +1,4 @@
-import { IDecoder, ValidationError, TypeOf, DecodeResult } from "../types.ts";
+import { IDecoder, ValidationError, Infer, DecodeResult } from "../types.ts";
 import { Decoder } from "../decoder.ts";
 import { failure, success, isSuccess } from "../result.ts";
 
@@ -10,12 +10,12 @@ type Intersection<Union> = (
 
 class IntersectionDecoder<
   Type extends [IDecoder<any>, IDecoder<any>, ...IDecoder<any>[]]
-> extends Decoder<Intersection<TypeOf<Type[number]>>> {
+> extends Decoder<Intersection<Infer<Type[number]>>> {
   constructor(private readonly decoders: Type) {
     super();
   }
 
-  decode(value: unknown): DecodeResult<Intersection<TypeOf<Type[number]>>> {
+  decode(value: unknown): DecodeResult<Intersection<Infer<Type[number]>>> {
     const errors: ValidationError[] = [];
     const decoded: unknown[] = [];
 
@@ -37,7 +37,7 @@ class IntersectionDecoder<
       ? this.mergeDecoded(decoded)
       : decoded[0];
 
-    return success(merged as Intersection<TypeOf<Type[number]>>);
+    return success(merged as Intersection<Infer<Type[number]>>);
   }
 
   private mergeDecoded(decoded: unknown[]) {
@@ -121,7 +121,7 @@ class IntersectionDecoder<
  * @param decoders List of decoders that will all be executed.
  * @example
  * const decoder = intersection([type({ firstName: string() }), type({ lastName: string() })])
- * type Name = TypeOf<typeof decoder>;
+ * type Name = Infer<typeof decoder>;
  * // Name = { firstName: string } & { lastName: string } = { firstName: string, lastName: string }
  */
 export const intersection = <

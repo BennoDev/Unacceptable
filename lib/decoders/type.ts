@@ -3,19 +3,19 @@ import {
   IDecoder,
   ValidationError,
   Literal,
-  TypeOf,
+  Infer,
 } from "../types.ts";
 import { Decoder } from "../decoder.ts";
 import { failure, success, isSuccess } from "../result.ts";
 
 type TypeOfProps<Props extends Record<string, IDecoder<any>>> = {
-  [Key in keyof Props]: TypeOf<Props[Key]>;
+  [Key in keyof Props]: Infer<Props[Key]>;
 };
 
 class TypeDecoder<Props extends Record<string, IDecoder<any>>> extends Decoder<
   // Can't use TypeOfProps here, as this type is treated different as an inline type declaration and results in incorrect inferrence
   {
-    [Key in keyof Props]: TypeOf<Props[Key]>;
+    [Key in keyof Props]: Infer<Props[Key]>;
   }
 > {
   constructor(private readonly decoders: Props) {
@@ -62,7 +62,7 @@ class TypeDecoder<Props extends Record<string, IDecoder<any>>> extends Decoder<
  *   firstName: string(),
  *   lastnName: string()
  * });
- * type Name = TypeOf<typeof decoder>;
+ * type Name = Infer<typeof decoder>;
  * // Name = { firstName: string, lastName: string }
  */
 export const type = <Props extends Record<string, IDecoder<any>>>(
