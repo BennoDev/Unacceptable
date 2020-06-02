@@ -16,8 +16,8 @@ runSuccessTestCases([
     description:
       "intersection: should return success for { firstName: string } & { lastName: string }",
     value: {
-      firstName: "Ronald",
-      lastName: "MacDonald",
+      firstName: "Ghenghis",
+      lastName: "Roundstone",
     },
   },
   {
@@ -135,7 +135,7 @@ runFailureTestCases([
     ]),
     description:
       "intersection: should return failure for: { firstName: string } & { lastName: string }",
-    value: { lastName: "MacDonald" },
+    value: { lastName: "Roundstone" },
   },
   {
     decoder: type({
@@ -149,8 +149,8 @@ runFailureTestCases([
     description:
       "intersection: should return failure for: { firstName: string, lastName: string, address: { state: string, country: string } & { street: string, city: string } }",
     value: {
-      firstName: "Ronald",
-      lastName: "MacDonald",
+      firstName: "Ghenghis",
+      lastName: "Roundstone",
       address: {
         city: "Somewhere",
         street: "Highstreet one",
@@ -199,8 +199,8 @@ Deno.test({
 
     const profile = intersection([newProfile, oldProfile]);
     const result = profile.decode({
-      firstName: "Ronald",
-      lastName: "McDonald",
+      firstName: "Ghenghis",
+      lastName: "Roundstone",
       addresses: [
         {
           street: "High street",
@@ -224,8 +224,8 @@ Deno.test({
 
     assertEquals(isSuccess(result), true);
     assertEquals((result as any).value, {
-      firstName: "Ronald",
-      lastName: "McDonald",
+      firstName: "Ghenghis",
+      lastName: "Roundstone",
       addresses: [
         {
           street: "High street",

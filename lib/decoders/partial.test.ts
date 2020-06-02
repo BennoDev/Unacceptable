@@ -16,7 +16,7 @@ runSuccessTestCases([
     }),
     description:
       "partial: should return success for { firstName: string, lastName: string, age: number }",
-    value: { firstName: "Ronald", lastName: "McDonald" },
+    value: { firstName: "Ghenghis", lastName: "Roundstone" },
   },
   {
     decoder: partial({
@@ -31,8 +31,8 @@ runSuccessTestCases([
     description:
       "partial: should return success for { firstName: string, lastName: string, age: number, address: { street: string, city: string } }",
     value: {
-      firstName: "Ronald",
-      lastName: "McDonald",
+      firstName: "Ghenghis",
+      lastName: "Roundstone",
       address: { street: "High street" },
     },
   },
@@ -98,7 +98,7 @@ runFailureTestCases([
     }),
     description:
       "partial: should return failure for { firstName: string, lastName: string, age: number }",
-    value: { firstName: "Ronald", lastName: "McDonald", age: "23" },
+    value: { firstName: "Ghenghis", lastName: "Roundstone", age: "23" },
   },
   {
     decoder: partial({
@@ -113,8 +113,8 @@ runFailureTestCases([
     description:
       "partial: should return failure for { firstName: string, lastName: string, age: number, address: { street: string, city: string } }",
     value: {
-      firstName: "Ronald",
-      lastName: "McDonald",
+      firstName: "Ghenghis",
+      lastName: "Roundstone",
       address: { street: "High street", city: 2000 },
     },
   },
@@ -173,8 +173,8 @@ Deno.test({
     });
 
     const result = decoder.decode({
-      firstName: "Donald",
-      lastName: "McRonald",
+      firstName: "Ghenghis",
+      lastName: "McGhenghis",
       age: 99,
     }) as Success<any>;
 
@@ -198,7 +198,7 @@ Deno.test({
     });
 
     const result = decoder.decode({
-      name: "Ronald",
+      name: "Ghenghis",
       age: "99",
       addresses: [
         {

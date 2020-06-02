@@ -35,8 +35,8 @@ bench({
 
     start();
     decoder.decode({
-      firstName: "Ronald",
-      lastName: "McDonald",
+      firstName: "Ghenghis",
+      lastName: "Roundstone",
       age: 80,
       meta: {
         interests: ["OFFERS", "NEWS"],

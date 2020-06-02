@@ -81,9 +81,9 @@ Deno.test({
   fn: () => {
     const requests = [
       {
-        firstName: "Ronald",
-        lastName: "McDonald",
-        email: "ronald_mcdonald@mail.com",
+        firstName: "Ghenghis",
+        lastName: "Roundstone",
+        email: "Ghenghis_Roundstone@mail.com",
         role: "ADMIN",
         addresses: [
           {
@@ -94,9 +94,9 @@ Deno.test({
         ],
       },
       {
-        firstName: "Ronald",
-        lastName: "McDonald",
-        email: "ronald_mcdonald@mail.com",
+        firstName: "Ghenghis",
+        lastName: "Roundstone",
+        email: "Ghenghis_Roundstone@mail.com",
         role: "ADMIN",
         addresses: undefined,
       },
@@ -116,9 +116,9 @@ Deno.test({
   fn: () => {
     const requests = [
       {
-        firstName: "Ronald",
-        lastName: "McDonald",
-        email: "ronald_mcdonald@mail.com",
+        firstName: "Ghenghis",
+        lastName: "Roundstone",
+        email: "Ghenghis_Roundstone@mail.com",
         role: "SOME_DUDE",
         addresses: [
           {
@@ -129,9 +129,9 @@ Deno.test({
         ],
       },
       {
-        firstName: "Ronald",
-        lastName: "McDonald",
-        email: "ronald_mcdonald@mail.com",
+        firstName: "Ghenghis",
+        lastName: "Roundstone",
+        email: "Ghenghis_Roundstone@mail.com",
         role: "ADMIN",
         addresses: [
           {

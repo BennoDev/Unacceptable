@@ -10,7 +10,7 @@ runSuccessTestCases([
   {
     decoder: type({}),
     description: "type: should return success for {}",
-    value: { firstName: "Ronald", lastName: "MacDonald" },
+    value: { firstName: "Ghenghis", lastName: "Roundstone" },
   },
   {
     decoder: type({
@@ -19,7 +19,7 @@ runSuccessTestCases([
     }),
     description:
       "type: should return success for { firstName: string, lastName: string }",
-    value: { firstName: "Ronald", lastName: "MacDonald" },
+    value: { firstName: "Ghenghis", lastName: "Roundstone" },
   },
   {
     decoder: array(
@@ -31,7 +31,7 @@ runSuccessTestCases([
     description:
       "type: should return success for [{ firstName: string, lastName: string }]",
     value: [
-      { firstName: "Ronald", lastName: "MacDonald" },
+      { firstName: "Ghenghis", lastName: "Roundstone" },
       { firstName: "Colonel", lastName: "Sanders" },
     ],
   },
@@ -111,7 +111,7 @@ runFailureTestCases([
     }),
     description:
       "type: should return failure for { firstName: string, lastName: string }",
-    value: { firstName: "Ronald", lastName: "" },
+    value: { firstName: "Ghenghis", lastName: "" },
   },
   {
     decoder: array(
@@ -123,7 +123,7 @@ runFailureTestCases([
     description:
       "type: should return failure for [{ firstName: string, lastName: string }]",
     value: [
-      { firstName: "Ronald", lastName: "MacDonald" },
+      { firstName: "Ghenghis", lastName: "Roundstone" },
       { firstName: "Colonel" },
     ],
   },
@@ -166,8 +166,8 @@ Deno.test({
     });
 
     const result = decoder.decode({
-      firstName: "Donald",
-      lastName: "McRonald",
+      firstName: "Ghenghis",
+      lastName: "McGhenghis",
       age: 99,
     }) as Success<any>;
 
@@ -189,8 +189,8 @@ Deno.test({
     });
 
     const result = decoder.decode({
-      firstName: "Donald",
-      lastName: "McRonald",
+      firstName: "Ghenghis",
+      lastName: "McGhenghis",
       age: 99,
       address: {
         street: "High street",
@@ -220,7 +220,7 @@ Deno.test({
     });
 
     const result = decoder.decode({
-      name: "Ronald",
+      name: "Ghenghis",
       age: "99",
       addresses: [
         {
