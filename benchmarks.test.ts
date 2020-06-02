@@ -8,7 +8,6 @@ import { literal } from "./lib/decoders/literal.ts";
 import { record } from "./lib/decoders/record.ts";
 import { type } from "./lib/decoders/type.ts";
 import { partial } from "./lib/decoders/partial.ts";
-import { intersection } from "./lib/decoders/intersection.ts";
 import { tuple } from "./lib/decoders/tuple.ts";
 
 bench({
