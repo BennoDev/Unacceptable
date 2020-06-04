@@ -48,4 +48,30 @@ For examples of specific decoders, check their respective documentation pages, o
 
 ### Validation rules
 
+Certain decoders, namely `string`, `number`, `array` and `record`, can have custom validation rules, added on top of the base validation.
+
+```ts
+const decoder = string().withRule({
+  name: "Password",
+  fn: () => {
+    const trimmedValue = value.trim();
+    const isCorrectLength =
+      trimmedValue.length >= 8 && trimmedValue.length < 255;
+    const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z]).{8,}$/;
+    return isCorrectLength && passwordRegex.test(value);
+  },
+});
+
+// Result is type Failure
+const result = decoder.decode("notgoodenough");
+```
+
 ### Create a custom decoder
+
+Creating your own decoder is easy, just create a class that extends either `Decoder` or `DecoderWithRules` (if you want a decoder that can have additional rules).
+
+Example:
+
+```ts
+class DateDecoder implements DecoderWithRules<> {}
+```
