@@ -1,4 +1,4 @@
-# MUHVAL
+# Unacceptable
 
 Strongly typed data validation and decoding library for Deno.
 
@@ -69,9 +69,28 @@ const result = decoder.decode("notgoodenough");
 ### Create a custom decoder
 
 Creating your own decoder is easy, just create a class that extends either `Decoder` or `DecoderWithRules` (if you want a decoder that can have additional rules).
+You then need to implement the abstract method `decode(value: unknown) => DecodeResult<Type>` where Type is the return type/the type that will be inferred, and also
+the type that is given to the DecoderWithRules generic class.
 
 Example:
 
 ```ts
-class DateDecoder implements DecoderWithRules<> {}
+import { success, failure } from "somewhere";
+
+class DateDecoder implements DecoderWithRules<Date> {
+    decode(value: unknown): DecodeResult<Date> {
+        if (value instanceof Date) {
+            return success(value.toIsoString());
+        }
+
+        return failure([ { name: "date", message: "The given value is not a date", value } ]);
+    }
+}
+
+// This decoder is one that can have additional rules, so the following would be possible
+const decoder = new DateDecoder();
+decoder.withRule({
+    name: "notTooLongAgo",
+    fn: (date: Date) => date.getYear() < 2000 ? "Date cant be from before 2000" : null
+});
 ```

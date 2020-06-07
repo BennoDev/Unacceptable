@@ -91,7 +91,6 @@ class IntersectionDecoder<
         });
       }
 
-      // Object
       if (!Array.isArray(value) && typeof value === "object") {
         // If the value is an object and has not yet been initialized, we do that here.
         if (!this.isObject(target[key])) {
