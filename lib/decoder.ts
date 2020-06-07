@@ -8,12 +8,13 @@ import {
 export abstract class Decoder<Type> implements IDecoder<Type> {
   readonly __TYPE__!: Type;
 
-  /**
-   * Decodes the given value, returns either a Success or Failure result.
-   * @param value Value to decode
-   */
   abstract decode(value: unknown): DecodeResult<Type>;
 
+  /**
+   * Adds context to the given errors.
+   * @param errors Errors to enrich
+   * @param part Part of the path, essentially context for the error
+   */
   protected withPath(
     errors: ValidationError[],
     part: string
@@ -36,11 +37,19 @@ export abstract class DecoderWithRules<Type> implements IDecoder<Type> {
 
   abstract decode(value: unknown): DecodeResult<Type>;
 
+  /**
+   * Adds a validation rule to the decoder to be executed on each decode call.
+   * @param rule The new rule
+   */
   withRule(rule: ValidationRule<Type>): this {
     this.rules.push(rule);
     return this;
   }
 
+  /**
+   * Passes the value though all the rules in this decoder.
+   * @param value The value to decode
+   */
   protected validateRules(value: Type) {
     return this.rules.reduce<ValidationError[]>((errors, rule) => {
       const error = rule.fn(value);
@@ -50,6 +59,11 @@ export abstract class DecoderWithRules<Type> implements IDecoder<Type> {
     }, []);
   }
 
+  /**
+   * Adds context to the given errors.
+   * @param errors Errors to enrich
+   * @param part Part of the path, essentially context for the error
+   */
   protected withPath(
     errors: ValidationError[],
     part: string

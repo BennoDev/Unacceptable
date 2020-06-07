@@ -96,6 +96,7 @@ export interface IDecoder<Type> {
 
   /**
    * Decodes a value and returns a result.
+   * @param value Value to decode
    */
   decode: (value: unknown) => DecodeResult<Type>;
 }
