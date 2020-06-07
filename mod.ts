@@ -29,7 +29,7 @@ import { union } from "./lib/decoders/union.ts";
 import { unknown } from "./lib/decoders/unknown.ts";
 
 /**
- * Object containing all the possible base validators.
+ * Base for all the validators.
  */
 export const d = {
   any,
