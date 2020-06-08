@@ -1,0 +1,65 @@
+# Type
+
+Validates the given object's shape where the specified keys have to pass their respective decoders.
+Ever key in present in the decoded value and did not pass through a decoder will be _stripped_.
+Error messages from this decoder will have context information (the key) added.
+It will infer to an object where the keys have the infered type of their respective decoders.
+
+Example:
+
+```ts
+import { d, IDecoder, Infer } from "unacceptable";
+
+const nonEmptyString = d.string().withRule({
+  name: "NonEmptyString",
+  fn: (value: string) => (value === "" ? "Value can't be empty" : null),
+});
+
+const addresses = d
+  .array(
+    d.type({
+      street: nonEmptyString,
+      number: d.number().withRule({
+        name: "Positive",
+        fn: (value: number) =>
+          number > 0 && Number.isInteger(value)
+            ? null
+            : "Number has to be a positive integer",
+      }),
+      zipCode: nonEmptyString,
+    })
+  )
+  .withRule({
+    name: "NonEmptyList",
+    fn: (value: unknown[]) =>
+      value.length === 0 ? "Need atleast one address" : null,
+  });
+
+const Request = d.type({
+  addresses,
+  firstName: nonEmptyString,
+  lastName: nonEmptyString,
+  employment: d.type({
+    title: nonEmptyString,
+    companyName: nonEmptyString,
+  }),
+});
+
+/**
+ * Equal to:
+ * {
+ *      firstName: string;
+ *      lastName: string;
+ *      employment: {
+ *          title: string;
+ *          companyName: string;
+ *      };
+ *      addresses: Array<{
+ *          zipCode: string;
+ *          street: string;
+ *          number: string;
+ *      }>
+ * }
+ */
+type Request = Infer<typeof Request>;
+```
