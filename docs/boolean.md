@@ -7,6 +7,6 @@ Example:
 ```ts
 import { d } from "unacceptable";
 
-const result = d.boolean().decode(true);
+const result = d.boolean().validate(true);
 // result is Success<boolean>
 ```

@@ -1,9 +1,9 @@
 /**
- * Every decoder is individually tested inside the source code, this file serves to provide
- * some real world scenario's testing how various parts / decoders work together.
+ * Every validator is individually tested inside the source code, this file serves to provide
+ * some real world scenario's testing how various parts / validators work together.
  */
 import { assertEquals } from "./test-deps.ts";
-import { d, Infer, IDecoder } from "./mod.ts";
+import { d, Infer, IValidator } from "./mod.ts";
 
 const rules = {
   url: {
@@ -49,8 +49,8 @@ const cd = {
   longText: d.string().withRule(rules.longText),
   dateString: d.string().withRule(rules.dateString),
   zipCode: d.number().withRule(rules.zipCode),
-  optional: <Type>(decoder: IDecoder<Type>) =>
-    d.union([decoder, d.undefined()]),
+  optional: <Type>(validator: IValidator<Type>) =>
+    d.union([validator, d.undefined()]),
 };
 
 //#region CreateUserRequest
@@ -104,7 +104,7 @@ Deno.test({
 
     requests.forEach((request) => {
       // Using any so I don't have to use the type guards in this test
-      const result: any = CreateUserRequest.decode(request);
+      const result: any = CreateUserRequest.validate(request);
       assertEquals(result.success, true);
       assertEquals(result.value, request);
     });
@@ -144,7 +144,7 @@ Deno.test({
 
     requests.forEach((request) => {
       // Using any so I don't have to use the type guards in this test
-      const result: any = CreateUserRequest.decode(request);
+      const result: any = CreateUserRequest.validate(request);
       assertEquals(result.success, false);
       assertEquals(Array.isArray(result.errors), true);
     });
@@ -246,7 +246,7 @@ Deno.test({
 
     requests.forEach((request) => {
       // Using any so I don't have to use the type guards in this test
-      const result: any = CreateContentRequest.decode(request);
+      const result: any = CreateContentRequest.validate(request);
       assertEquals(result.success, true);
       assertEquals(result.value, request);
     });
@@ -293,7 +293,7 @@ Deno.test({
 
     requests.forEach((request) => {
       // Using any so I don't have to use the type guards in this test
-      const result: any = CreateContentRequest.decode(request);
+      const result: any = CreateContentRequest.validate(request);
       assertEquals(result.success, false);
       assertEquals(Array.isArray(result.errors), true);
     });
@@ -305,7 +305,10 @@ Deno.test({
 Deno.test({
   name: "Errors: should correctly return list of errors",
   fn: () => {
-    const result: any = CreateContentRequest.decode({ type: "TIP", data: {} });
+    const result: any = CreateContentRequest.validate({
+      type: "TIP",
+      data: {},
+    });
     assertEquals(result.errors, [
       {
         message: "Given value is not a string",

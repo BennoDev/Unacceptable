@@ -15,6 +15,6 @@ const result = d
     fn: (value: number) =>
       Number.isInteger(value) ? null : "Given value is not an integer",
   })
-  .decode(9);
+  .validate(9);
 // result is Success<number>
 ```

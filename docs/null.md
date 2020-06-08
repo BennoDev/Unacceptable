@@ -7,6 +7,6 @@ Example:
 ```ts
 import { d } from "unacceptable";
 
-const result = d.null().decode(null);
+const result = d.null().validate(null);
 // result is Success<null>
 ```

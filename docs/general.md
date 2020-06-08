@@ -1,17 +1,17 @@
 # Unacceptable
 
-Unacceptable is a Deno-first library for decoding and validating unknown data that takes advantage of Typescript's flexible type system, to allow static type generation from decoders.
+Unacceptable is a Deno-first library for validation and validating unknown data that takes advantage of Typescript's flexible type system, to allow static type generation from validators.
 
 Strongly influenced by existing libraries such as io-ts, runtypes and joi.
 
 ## Basic Usage
 
-Decoders can be used as such:
+Validators can be used as such:
 
 ```ts
 import { d, Infer, isSuccess } from "unacceptable";
 
-const ageDecoder = d.string().withRule({
+const ageValidator = d.string().withRule({
   name: "IsAge",
   fn: (value) =>
     Number.isInteger(value) && value > 0 && value < 120
@@ -23,11 +23,11 @@ const UserProfile = d.type({
   email: d.string(),
   firstName: d.string(),
   lastName: d.string(),
-  age: ageDecoder,
+  age: ageValidator,
 });
 type UserProfile = Infer<typeof UserProfile>;
 
-const result = UserProfile.decode({
+const result = UserProfile.validate({
   email: "Ghenghis_Roundstone@something.com",
   firstName: "Ghenghis",
   lastName: "Roundstone",
@@ -42,28 +42,28 @@ if (isSuccess(result)) {
 }
 ```
 
-For examples of specific decoders, check their respective documentation pages, or browse the tests.
+For examples of specific validators, check their respective documentation pages, or browse the tests.
 
 ## Documentation
 
-Roughly speaking we can separate the decoders into 3 types:
+Roughly speaking we can separate the validators into 3 types:
 
-- Primitive decoders (`string, number, boolean, literal, undefined, null`)
-- Non-primitive decoders (`object, array, type, record`)
+- Primitive validators (`string, number, boolean, literal, undefined, null`)
+- Non-primitive validators (`object, array, type, record`)
 - And those that fall outside (`any, unknown, union, intersection`)
 
-Each decoder has a dedicated page in the documentation with examples and deeper explanations.
+Each validator has a dedicated page in the documentation with examples and deeper explanations.
 
-### Decoders
+### Validators
 
 ### Validation rules
 
-Certain decoders, namely `string`, `number`, `array` and `record`, can have custom validation rules, added on top of the base validation. Validation should not mutate or change the data that is being validated, but merely assert conditions.
+Certain validators, namely `string`, `number`, `array` and `record`, can have custom validation rules, added on top of the base validation. Validation should not mutate or change the data that is being validated, but merely assert conditions.
 
 The return type for a rule is `string | null` where string refers to the error message.
 
 ```ts
-const decoder = string().withRule({
+const validator = string().withRule({
   name: "Password",
   fn: () => {
     const trimmedValue = value.trim();
@@ -75,22 +75,22 @@ const decoder = string().withRule({
 });
 
 // Result is type Failure
-const result = decoder.decode("notgoodenough");
+const result = validator.validate("notgoodenough");
 ```
 
-### Create a custom decoder
+### Create a custom validator
 
-Creating your own decoder is easy, just create a class that extends either `Decoder<T>` or `DecoderWithRules<T>` (if you want a decoder that can have additional rules).
-You then need to implement the abstract method `decode(value: unknown) => DecodeResult<Type>` where Type is the return type/the type that will be inferred, and also
-the type that is given to the DecoderWithRules generic class.
+Creating your own validator is easy, just create a class that extends either `Validator<T>` or `ValidatorWithRules<T>` (if you want a validator that can have additional rules).
+You then need to implement the abstract method `validate(value: unknown) => ValidationResult<Type>` where Type is the return type/the type that will be inferred, and also
+the type that is given to the ValidatorWithRules generic class.
 
-Example: simple decoder
+Example: simple validator
 
 ```ts
-import { success, failure, Decoder } from "unacceptable";
+import { success, failure, Validator } from "unacceptable";
 
-class DateDecoder implements Decoder<Date> {
-  decode(value: unknown): DecodeResult<Date> {
+class DateValidator implements Validator<Date> {
+  validate(value: unknown): ValidationResult<Date> {
     if (typeof value === "string" && !Number.isNaN(Date.parse(value))) {
       return success(new Date(value));
     }
@@ -105,16 +105,16 @@ class DateDecoder implements Decoder<Date> {
   }
 }
 
-const decoder = new DateDecoder();
-const result = decoder.decode(new Date().toISOString());
+const validator = new DateValidator();
+const result = validator.validate(new Date().toISOString());
 // result is Success<Date>
 ```
 
-Or as a decoder that can have custom rules:
+Or as a validator that can have custom rules:
 
 ```ts
-class DateDecoder implements DecoderWithRules<Date> {
-  decode(value: unknown): DecodeResult<Date> {
+class DateValidator implements ValidatorWithRules<Date> {
+  validate(value: unknown): ValidationResult<Date> {
     const timestamp = Date.parse(value);
     if (typeof value !== "string" || Number.isNaN(timestamp)) {
       return failure([
@@ -131,7 +131,7 @@ class DateDecoder implements DecoderWithRules<Date> {
   }
 }
 
-const date = new DateDecoder().withRule({
+const date = new DateValidator().withRule({
   name: "After2000",
   fn: (value: string) => {
     // We already know it's a valid date
@@ -141,8 +141,8 @@ const date = new DateDecoder().withRule({
       : "Given date is from before the year 2000";
   },
 });
-const result = decoder.decode(new Date().toISOString());
+const result = validator.validate(new Date().toISOString());
 // result is Success<Date>
 ```
 
-For more information you can look at the individual decoder's documentation pages. Or dive into the source code / tests for concrete examples.
+For more information you can look at the individual validator's documentation pages. Or dive into the source code / tests for concrete examples.

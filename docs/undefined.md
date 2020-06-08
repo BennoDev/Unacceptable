@@ -7,6 +7,6 @@ Example:
 ```ts
 import { d } from "unacceptable";
 
-const result = d.undefined().decode(undefined);
+const result = d.undefined().validate(undefined);
 // result is Success<undefined>
 ```

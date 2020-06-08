@@ -1,14 +1,14 @@
 # Type
 
-Validates the given object's shape where the specified keys have to pass their respective decoders.
-Ever key in present in the decoded value and did not pass through a decoder will be _stripped_.
-Error messages from this decoder will have context information (the key) added.
-It will infer to an object where the keys have the infered type of their respective decoders.
+Validates the given object's shape where the specified keys have to pass their respective validators.
+Ever key in present in the validated value and did not pass through a validator will be _stripped_.
+Error messages from this validator will have context information (the key) added.
+It will infer to an object where the keys have the infered type of their respective validators.
 
 Example:
 
 ```ts
-import { d, IDecoder, Infer } from "unacceptable";
+import { d, IValidator, Infer } from "unacceptable";
 
 const nonEmptyString = d.string().withRule({
   name: "NonEmptyString",

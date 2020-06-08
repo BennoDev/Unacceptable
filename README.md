@@ -1,4 +1,4 @@
-# Decoder
+# Validator
 
 V1.0
 
@@ -18,7 +18,7 @@ V1.0
 - intersection
 - partial
 
-- for ~union~, ~array~, ~intersection~, ~partial~, ~tuple~, ~record~ always return value that results from decoders, not just value passed by client (DONE)
+- for ~union~, ~array~, ~intersection~, ~partial~, ~tuple~, ~record~ always return value that results from validators, not just value passed by client (DONE)
 - go over all testing (DONE)
   - extra test cases (general, not specific) (WIP)
 - write comments for public APIs [DONE]
@@ -36,7 +36,7 @@ V1.1 (TBD)
 V1.2 (TBD)
 
 - better error messages for complex types (maybe generated names for unions / intersections?)
-- common decoding rules / decoders
+- common validation rules / validators
 - branded?
 - recursive?
 - date?

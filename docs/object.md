@@ -7,6 +7,6 @@ Example:
 ```ts
 import { d } from "unacceptable";
 
-const result = d.object().decode({ key1: "value", key2: 23, key3: [1, "2"] });
+const result = d.object().validate({ key1: "value", key2: 23, key3: [1, "2"] });
 // result is Success<object>
 ```

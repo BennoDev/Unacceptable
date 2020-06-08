@@ -1,4 +1,9 @@
-import { ValidationError, Success, Failure, DecodeResult } from "./types.ts";
+import {
+  ValidationError,
+  Success,
+  Failure,
+  ValidationResult,
+} from "./types.ts";
 
 /**
  * Wraps the given value in a `Success` type.
@@ -19,16 +24,16 @@ export const failure = (errors: ValidationError[]): Failure => ({
 });
 
 /**
- * Checks if the result of a decoder is a success.
- * @param result Result of a decoder
+ * Checks if the result of a validator is a success.
+ * @param result Result of a validator
  */
 export const isSuccess = <Type>(
-  result: DecodeResult<Type>
+  result: ValidationResult<Type>
 ): result is Success<Type> => result.success;
 
 /**
- * Checks if the result of a decoder is a failure.
- * @param result Result of a decoder
+ * Checks if the result of a validator is a failure.
+ * @param result Result of a validator
  */
-export const isFailure = (result: DecodeResult): result is Failure =>
+export const isFailure = (result: ValidationResult): result is Failure =>
   !result.success;

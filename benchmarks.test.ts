@@ -1,20 +1,20 @@
 import { runBenchmarks, bench } from "./test-deps.ts";
-import { array } from "./lib/decoders/array.ts";
-import { string } from "./lib/decoders/string.ts";
-import { number } from "./lib/decoders/number.ts";
-import { boolean } from "./lib/decoders/boolean.ts";
-import { union } from "./lib/decoders/union.ts";
-import { literal } from "./lib/decoders/literal.ts";
-import { record } from "./lib/decoders/record.ts";
-import { type } from "./lib/decoders/type.ts";
-import { partial } from "./lib/decoders/partial.ts";
-import { tuple } from "./lib/decoders/tuple.ts";
+import { array } from "./lib/validators/array.ts";
+import { string } from "./lib/validators/string.ts";
+import { number } from "./lib/validators/number.ts";
+import { boolean } from "./lib/validators/boolean.ts";
+import { union } from "./lib/validators/union.ts";
+import { literal } from "./lib/validators/literal.ts";
+import { record } from "./lib/validators/record.ts";
+import { type } from "./lib/validators/type.ts";
+import { partial } from "./lib/validators/partial.ts";
+import { tuple } from "./lib/validators/tuple.ts";
 
 bench({
   name: "type",
   runs: 1000000,
   func: ({ stop, start }) => {
-    const decoder = type({
+    const validator = type({
       firstName: string(),
       lastName: string(),
       age: number(),
@@ -34,7 +34,7 @@ bench({
     });
 
     start();
-    decoder.decode({
+    validator.validate({
       firstName: "Ghenghis",
       lastName: "Roundstone",
       age: 80,
@@ -57,10 +57,10 @@ bench({
   name: "record",
   runs: 1000000,
   func: ({ stop, start }) => {
-    const decoder = record(string());
+    const validator = record(string());
 
     start();
-    decoder.decode({ prop1: "Hey", prop2: "Buds", prop3: 123 });
+    validator.validate({ prop1: "Hey", prop2: "Buds", prop3: 123 });
     stop();
   },
 });
@@ -69,14 +69,14 @@ bench({
   name: "array",
   runs: 10,
   func: ({ start, stop }) => {
-    const decoder = array(string());
+    const validator = array(string());
     const testData: string[] = [];
     for (let i = 0; i < 1000000; i++) {
       testData.push(`Number: ${i}`);
     }
 
     start();
-    decoder.decode(testData);
+    validator.validate(testData);
     stop();
   },
 });
@@ -85,7 +85,7 @@ bench({
   name: "union",
   runs: 1000000,
   func: ({ stop, start }) => {
-    const decoder = union([
+    const validator = union([
       literal(200),
       literal(201),
       literal(202),
@@ -98,7 +98,7 @@ bench({
     ]);
 
     start();
-    decoder.decode("200");
+    validator.validate("200");
     stop();
   },
 });
@@ -141,7 +141,7 @@ const Ship = type({
   crew: array(CrewMember),
 });
 
-const decoder = union([Asteroid, Planet, Ship]);
+const validator = union([Asteroid, Planet, Ship]);
 
 const good = {
   type: "ship",
@@ -190,7 +190,7 @@ bench({
   runs: 1000000,
   func: ({ start, stop }) => {
     start();
-    decoder.decode(good);
+    validator.validate(good);
     stop();
   },
 });
@@ -200,7 +200,7 @@ bench({
   runs: 1000000,
   func: ({ start, stop }) => {
     start();
-    decoder.decode(bad);
+    validator.validate(bad);
     stop();
   },
 });

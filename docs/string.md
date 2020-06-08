@@ -14,6 +14,6 @@ const result = d
     name: "notEmpty",
     fn: (value: string) => (value !== "" ? null : "Given value is empty"),
   })
-  .decode("a value");
+  .validate("a value");
 // result is Success<string>
 ```
