@@ -3,7 +3,7 @@
  * some real world scenario's testing how various parts / validators work together.
  */
 import { assertEquals } from "./test-deps.ts";
-import { d, Infer, IValidator } from "./mod.ts";
+import { v, Infer, IValidator } from "./mod.ts";
 
 const rules = {
   url: {
@@ -44,34 +44,34 @@ const rules = {
 };
 
 const cd = {
-  url: d.string().withRule(rules.url),
-  shortText: d.string().withRule(rules.shortText),
-  longText: d.string().withRule(rules.longText),
-  dateString: d.string().withRule(rules.dateString),
-  zipCode: d.number().withRule(rules.zipCode),
+  url: v.string().withRule(rules.url),
+  shortText: v.string().withRule(rules.shortText),
+  longText: v.string().withRule(rules.longText),
+  dateString: v.string().withRule(rules.dateString),
+  zipCode: v.number().withRule(rules.zipCode),
   optional: <Type>(validator: IValidator<Type>) =>
-    d.union([validator, d.undefined()]),
+    v.union([validator, v.undefined()]),
 };
 
 //#region CreateUserRequest
-const CreateUserRequest = d.type({
+const CreateUserRequest = v.type({
   firstName: cd.optional(cd.shortText),
   lastName: cd.optional(cd.shortText),
   email: cd.shortText,
-  role: d.union([
-    d.literal("CUSTOMER"),
-    d.literal("ADMIN"),
-    d.literal("SUPER_ADMIN"),
+  role: v.union([
+    v.literal("CUSTOMER"),
+    v.literal("ADMIN"),
+    v.literal("SUPER_ADMIN"),
   ]),
-  addresses: d.union([
-    d.array(
-      d.type({
+  addresses: v.union([
+    v.array(
+      v.type({
         street: cd.shortText,
         city: cd.shortText,
         zipCode: cd.zipCode,
       })
     ),
-    d.undefined(),
+    v.undefined(),
   ]),
 });
 type CreateUserRequest = Infer<typeof CreateUserRequest>;
@@ -154,38 +154,38 @@ Deno.test({
 //#endregion
 
 //#region CreateContentRequest
-const Publishable = d.type({
+const Publishable = v.type({
   publishDate: cd.dateString,
-  isPlanned: d.boolean(),
-  notifyWhenPublished: d.boolean(),
+  isPlanned: v.boolean(),
+  notifyWhenPublished: v.boolean(),
 });
 
-const Shareable = d.type({
-  type: d.union([
-    d.literal("FACEBOOK"),
-    d.literal("TWITTER"),
-    d.literal("LINKED_IN"),
+const Shareable = v.type({
+  type: v.union([
+    v.literal("FACEBOOK"),
+    v.literal("TWITTER"),
+    v.literal("LINKED_IN"),
   ]),
   url: cd.url,
 });
 
-const Content = d.type({
+const Content = v.type({
   title: cd.shortText,
   summary: cd.optional(cd.shortText),
   content: cd.longText,
 });
 
-const CreateContentRequest = d.type({
-  type: d.union([
-    d.literal("VIDEO"),
-    d.literal("RESULT"),
-    d.literal("ACTION"),
-    d.literal("TIP"),
+const CreateContentRequest = v.type({
+  type: v.union([
+    v.literal("VIDEO"),
+    v.literal("RESULT"),
+    v.literal("ACTION"),
+    v.literal("TIP"),
   ]),
-  data: d.intersection([
+  data: v.intersection([
     Content,
-    d.type({
-      social: d.array(Shareable),
+    v.type({
+      social: v.array(Shareable),
       publish: Publishable,
     }),
   ]),

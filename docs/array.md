@@ -6,7 +6,7 @@ Infers to `Array<Type>` where Type is the inferred type of the argument validato
 Example:
 
 ```ts
-import { d } from "unacceptable";
+import { v } from "unacceptable";
 
 const result = d
   .array(d.type({ firstName: d.string() }))

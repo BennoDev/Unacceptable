@@ -6,7 +6,7 @@ Infers to `number`.
 Example:
 
 ```ts
-import { d } from "unacceptable";
+import { v } from "unacceptable";
 
 const result = d
   .number()

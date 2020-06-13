@@ -5,7 +5,7 @@ One of the simplest validators, `unknown` will always return a success result, w
 Example:
 
 ```ts
-import { d } from "unacceptable";
+import { v } from "unacceptable";
 
 const result = d
   .unknown()

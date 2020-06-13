@@ -6,7 +6,7 @@ Infers to `string`.
 Example:
 
 ```ts
-import { d } from "unacceptable";
+import { v } from "unacceptable";
 
 const result = d
   .string()

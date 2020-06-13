@@ -31,7 +31,7 @@ import { unknown } from "./lib/validators/unknown.ts";
 /**
  * Base for all the validators.
  */
-export const d = {
+export const v = {
   any,
   array,
   boolean,

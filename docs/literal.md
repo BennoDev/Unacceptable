@@ -6,7 +6,7 @@ Infers to the value of the literal type.
 Example:
 
 ```ts
-import { d } from "unacceptable";
+import { v } from "unacceptable";
 
 const result = d.literal("200").validate("200");
 // result is Success<"200">

@@ -6,7 +6,7 @@ Infers to `Record<string, Type>` where Type is the inferred type of the argument
 Example:
 
 ```ts
-import { d } from "unacceptable";
+import { v } from "unacceptable";
 
 const result = d
   .record(d.string())

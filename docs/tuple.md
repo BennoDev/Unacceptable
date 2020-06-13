@@ -8,7 +8,7 @@ This validator is strict, if there are more elements than specified validators, 
 Example:
 
 ```ts
-import { d } from "unacceptable";
+import { v } from "unacceptable";
 
 const result = d
   .type([d.string(), d.string(), d.boolean()])
