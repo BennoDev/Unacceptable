@@ -11,7 +11,7 @@ Validators can be used as such:
 ```ts
 import { d, Infer, isSuccess } from "unacceptable";
 
-const ageValidator = d.string().withRule({
+const ageValidator = v.string().withRule({
   name: "IsAge",
   fn: (value) =>
     Number.isInteger(value) && value > 0 && value < 120
@@ -19,10 +19,10 @@ const ageValidator = d.string().withRule({
       : "Given number is not a proper age",
 });
 
-const UserProfile = d.type({
-  email: d.string(),
-  firstName: d.string(),
-  lastName: d.string(),
+const UserProfile = v.type({
+  email: v.string(),
+  firstName: v.string(),
+  lastName: v.string(),
   age: ageValidator,
 });
 type UserProfile = Infer<typeof UserProfile>;

@@ -7,6 +7,6 @@ Example:
 ```ts
 import { v } from "unacceptable";
 
-const result = d.any().validate({ key1: "value", key2: 23, key3: [1, "2"] });
+const result = v.any().validate({ key1: "value", key2: 23, key3: [1, "2"] });
 // result is Success<any>
 ```

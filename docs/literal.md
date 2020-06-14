@@ -8,6 +8,6 @@ Example:
 ```ts
 import { v } from "unacceptable";
 
-const result = d.literal("200").validate("200");
+const result = v.literal("200").validate("200");
 // result is Success<"200">
 ```

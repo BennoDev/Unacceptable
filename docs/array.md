@@ -9,7 +9,7 @@ Example:
 import { v } from "unacceptable";
 
 const result = d
-  .array(d.type({ firstName: d.string() }))
+  .array(v.type({ firstName: v.string() }))
   .validate([{ firstName: "Ghenghis" }, { firstName: "Conan" }]);
 // result is Success<Array<{ firstName: string }>>
 ```

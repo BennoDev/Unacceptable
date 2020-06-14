@@ -10,16 +10,16 @@ Example:
 ```ts
 import { d, IValidator, Infer } from "unacceptable";
 
-const nonEmptyString = d.string().withRule({
+const nonEmptyString = v.string().withRule({
   name: "NonEmptyString",
   fn: (value: string) => (value === "" ? "Value can't be empty" : null),
 });
 
 const addresses = d
   .array(
-    d.type({
+    v.type({
       street: nonEmptyString,
-      number: d.number().withRule({
+      number: v.number().withRule({
         name: "Positive",
         fn: (value: number) =>
           number > 0 && Number.isInteger(value)
@@ -35,11 +35,11 @@ const addresses = d
       value.length === 0 ? "Need atleast one address" : null,
   });
 
-const Request = d.type({
+const Request = v.type({
   addresses,
   firstName: nonEmptyString,
   lastName: nonEmptyString,
-  employment: d.type({
+  employment: v.type({
     title: nonEmptyString,
     companyName: nonEmptyString,
   }),

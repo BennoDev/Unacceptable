@@ -12,7 +12,7 @@ Example:
 import { v } from "unacceptable";
 
 const result = d
-  .union([d.literal("200"), d.literal("201"), d.literal("204")])
+  .union([v.literal("200"), v.literal("201"), v.literal("204")])
   .decode("200");
 // result is Success<"200" | "201" | "204">
 ```
@@ -22,21 +22,21 @@ However it can also work for complex types:
 ```ts
 import { v } from "unacceptable";
 
-const Video = d.decode({
-  type: d.literal("VIDEO"),
-  name: d.string(),
-  length: d.number(),
-  categories: d.array(d.string()),
+const Video = v.decode({
+  type: v.literal("VIDEO"),
+  name: v.string(),
+  length: v.number(),
+  categories: v.array(v.string()),
 });
 
-const Image = d.decode({
+const Image = v.decode({
   type: "IMAGE",
-  name: d.string(),
-  fileType: d.union([d.literal("png"), d.literal("jpg"), d.literal("gif")]),
-  alt: d.string(),
+  name: v.string(),
+  fileType: v.union([v.literal("png"), v.literal("jpg"), v.literal("gif")]),
+  alt: v.string(),
 });
 
-const result = d.union([Image, Video]).decode({
+const result = v.union([Image, Video]).decode({
   type: "VIDEO",
   name: "Half-Life 3 trailer",
   length: 90,
