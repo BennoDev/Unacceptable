@@ -2,42 +2,30 @@
 
 V1.0
 
-- string
-- boolean
-- number
-- array
-- null
-- undefined
-- record
-- any
-- unknown
-- object
-- union
-- tuple
-- type
-- intersection
-- partial
-
-- for ~union~, ~array~, ~intersection~, ~partial~, ~tuple~, ~record~ always return value that results from validators, not just value passed by client (DONE)
-- go over all testing (DONE)
-  - extra test cases (general, not specific) (WIP)
-- write comments for public APIs [DONE]
-- write documentation [TODO]
-- see if possible to hide `__TYPE__` (NOT POSSIBLE)
-- performance testing (NOT PRIORITY)
-  - rewrite all map / filter / find / reduce to loops for performance
-  - remove spread operator and use concat
-  - maybe look into memoization?
+- [x] string
+- [x] boolean
+- [x] number
+- [x] array
+- [x] null
+- [x] undefined
+- [x] record
+- [x] any
+- [x] unknown
+- [x] object
+- [x] union
+- [x] tuple
+- [x] type
+- [x] intersection
+- [x] partial
 
 V1.1 (TBD)
 
-- node support
+- [] node support
 
 V1.2 (TBD)
 
-- better error messages for complex types (maybe generated names for unions / intersections?)
-- common validation rules / validators
-- branded?
-- recursive?
-- date?
-- error reporters?
+- [] better error messages for complex types (maybe generated names for unions / intersections?)
+- [] common validation rules / validators
+- [] branded?
+- [] date?
+- [] error reporters?
