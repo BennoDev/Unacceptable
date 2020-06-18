@@ -1,17 +1,18 @@
 # Union
 
-Validates the given successfully passes through one of the argument validators.
+Validates the given value successfully passes through one of the argument validators.
 After the value successfully passes through a validator for the first time it will instantly return,
 so if it were to successfully validate through more than one validator, only the result of the first one in the list will be returned.
 
 This validator is often used in combination with `literal` to validate and construct type literals.
+The inferred type is a union of all of the validator's static type.
 
 Example:
 
 ```ts
 import { v } from "unacceptable";
 
-const result = d
+const result = v
   .union([v.literal("200"), v.literal("201"), v.literal("204")])
   .decode("200");
 // result is Success<"200" | "201" | "204">
