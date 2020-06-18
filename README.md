@@ -56,6 +56,25 @@ Each validator has a dedicated page in the documentation with examples and deepe
 
 ### Validators
 
+Available validators:
+
+- [any](docs/any.md)
+- [array](docs/array.md)
+- [boolean](docs/boolean.md)
+- [intersection](docs/intersection.md)
+- [literal](docs/literal.md)
+- [null](docs/null.md)
+- [number](docs/number.md)
+- [object](docs/object.md)
+- [partial](docs/partial.md)
+- [record](docs/record.md)
+- [string](docs/string.md)
+- [tuple](docs/tuple.md)
+- [type](docs/type.md)
+- [undefined](docs/undefined.md)
+- [union](docs/union.md)
+- [unknown](docs/unknown.md)
+
 ### Validation rules
 
 Certain validators, namely `string`, `number`, `array` and `record`, can have custom validation rules, added on top of the base validation. Validation should not mutate or change the data that is being validated, but merely assert conditions.
