@@ -12,7 +12,7 @@ const result = v
     v.type({ firstName: v.string(), lastName: v.string() }),
     v.type({ street: v.string(), city: v.string() }),
   ])
-  .decode({
+  .validate({
     firstName: "Djenghis",
     lastName: "Squarebrick",
     street: "Coolstreet 1",

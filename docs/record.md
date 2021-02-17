@@ -8,7 +8,7 @@ Example:
 ```ts
 import { v } from "unacceptable";
 
-const result = d
+const result = v
   .record(v.string())
   .validate({ key1: "value", key2: 23, key3: [1, "2"] });
 // result is Failure because key3 is not a string

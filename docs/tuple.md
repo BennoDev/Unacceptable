@@ -10,7 +10,7 @@ Example:
 ```ts
 import { v } from "unacceptable";
 
-const result = d
+const result = v
   .type([v.string(), v.string(), v.boolean()])
   .validate(["first", "second", false]);
 // result is Success<[string, string, boolean]>

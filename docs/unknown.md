@@ -7,7 +7,7 @@ Example:
 ```ts
 import { v } from "unacceptable";
 
-const result = d
+const result = v
   .unknown()
   .validate({ key1: "value", key2: 23, key3: [1, "2"] });
 // result is Success<unknown>

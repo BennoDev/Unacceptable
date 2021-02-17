@@ -14,7 +14,7 @@ import { v } from "unacceptable";
 
 const result = v
   .union([v.literal("200"), v.literal("201"), v.literal("204")])
-  .decode("200");
+  .validate("200");
 // result is Success<"200" | "201" | "204">
 ```
 
@@ -23,21 +23,21 @@ However it can also work for complex types:
 ```ts
 import { v } from "unacceptable";
 
-const Video = v.decode({
+const Video = v.validate({
   type: v.literal("VIDEO"),
   name: v.string(),
   length: v.number(),
   categories: v.array(v.string()),
 });
 
-const Image = v.decode({
+const Image = v.validate({
   type: "IMAGE",
   name: v.string(),
   fileType: v.union([v.literal("png"), v.literal("jpg"), v.literal("gif")]),
   alt: v.string(),
 });
 
-const result = v.union([Image, Video]).decode({
+const result = v.union([Image, Video]).validate({
   type: "VIDEO",
   name: "Half-Life 3 trailer",
   length: 90,

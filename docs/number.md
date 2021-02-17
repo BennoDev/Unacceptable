@@ -8,7 +8,7 @@ Example:
 ```ts
 import { v } from "unacceptable";
 
-const result = d
+const result = v
   .number()
   .withRule({
     name: "integer",

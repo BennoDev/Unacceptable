@@ -6,14 +6,14 @@ The type that is inferred here is very similar to that of a `Type` validator, wi
 Example:
 
 ```ts
-import { d, IValidator, Infer } from "unacceptable";
+import { v, IValidator, Infer } from "unacceptable";
 
 const nonEmptyString = v.string().withRule({
   name: "NonEmptyString",
   fn: (value: string) => (value === "" ? "Value can't be empty" : null),
 });
 
-const addresses = d
+const addresses = v
   .array(
     v.type({
       street: nonEmptyString,
