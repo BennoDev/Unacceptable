@@ -45,7 +45,7 @@ const rules = {
   },
 };
 
-const cd = {
+const customValidators = {
   url: v.string().withRule(rules.url),
   shortText: v.string().withRule(rules.shortText),
   longText: v.string().withRule(rules.longText),
@@ -57,9 +57,9 @@ const cd = {
 
 //#region CreateUserRequest
 const CreateUserRequest = v.type({
-  firstName: cd.optional(cd.shortText),
-  lastName: cd.optional(cd.shortText),
-  email: cd.shortText,
+  firstName: customValidators.optional(customValidators.shortText),
+  lastName: customValidators.optional(customValidators.shortText),
+  email: customValidators.shortText,
   role: v.union([
     v.literal("CUSTOMER"),
     v.literal("ADMIN"),
@@ -68,9 +68,9 @@ const CreateUserRequest = v.type({
   addresses: v.union([
     v.array(
       v.type({
-        street: cd.shortText,
-        city: cd.shortText,
-        zipCode: cd.zipCode,
+        street: customValidators.shortText,
+        city: customValidators.shortText,
+        zipCode: customValidators.zipCode,
       }),
     ),
     v.undefined(),
@@ -157,7 +157,7 @@ Deno.test({
 
 //#region CreateContentRequest
 const Publishable = v.type({
-  publishDate: cd.dateString,
+  publishDate: customValidators.dateString,
   isPlanned: v.boolean(),
   notifyWhenPublished: v.boolean(),
 });
@@ -168,13 +168,13 @@ const Shareable = v.type({
     v.literal("TWITTER"),
     v.literal("LINKED_IN"),
   ]),
-  url: cd.url,
+  url: customValidators.url,
 });
 
 const Content = v.type({
-  title: cd.shortText,
-  summary: cd.optional(cd.shortText),
-  content: cd.longText,
+  title: customValidators.shortText,
+  summary: customValidators.optional(customValidators.shortText),
+  content: customValidators.longText,
 });
 
 const CreateContentRequest = v.type({

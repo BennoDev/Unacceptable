@@ -11,7 +11,7 @@ Strongly influenced by existing libraries such as io-ts, runtypes and joi.
 Validators can be used as such:
 
 ```ts
-import { d, Infer, isSuccess } from "unacceptable";
+import { v, Infer, isSuccess } from "unacceptable";
 
 const ageValidator = v.string().withRule({
   name: "IsAge",
@@ -94,8 +94,8 @@ const validator = string().withRule({
   name: "Password",
   fn: () => {
     const trimmedValue = value.trim();
-    const isCorrectLength = trimmedValue.length >= 8 &&
-      trimmedValue.length < 255;
+    const isCorrectLength =
+      trimmedValue.length >= 8 && trimmedValue.length < 255;
     const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z]).{8,}$/;
     return isCorrectLength && passwordRegex.test(value);
   },

@@ -1,5 +1,5 @@
 // Types
-export {
+export type {
   Infer,
   IValidator,
   ValidationError,

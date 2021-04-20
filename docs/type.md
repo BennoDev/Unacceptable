@@ -9,14 +9,14 @@ the keys have the infered type of their respective validators.
 Example:
 
 ```ts
-import { d, Infer, IValidator } from "unacceptable";
+import { v, Infer, IValidator } from "unacceptable";
 
 const nonEmptyString = v.string().withRule({
   name: "NonEmptyString",
   fn: (value: string) => (value === "" ? "Value can't be empty" : null),
 });
 
-const addresses = d
+const addresses = v
   .array(
     v.type({
       street: nonEmptyString,
@@ -28,7 +28,7 @@ const addresses = d
             : "Number has to be a positive integer",
       }),
       zipCode: nonEmptyString,
-    }),
+    })
   )
   .withRule({
     name: "NonEmptyList",
