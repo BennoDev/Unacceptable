@@ -4,7 +4,7 @@
 
 > **I created this library to see how far I could take TypeScript's type
 > system. I've used it to serve as a demo for the language, and to learn more
-> about it myself.** > **There are currently no plans to actively maintain it,
+> about it myself. There are currently no plans to actively maintain it,
 > so while it might work, do NOT use it.**
 
 ---
