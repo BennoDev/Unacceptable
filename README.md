@@ -11,7 +11,7 @@ Strongly influenced by existing libraries such as io-ts, runtypes and joi.
 Validators can be used as such:
 
 ```ts
-import { v, Infer, isSuccess } from "unacceptable";
+import { Infer, isSuccess, v } from "unacceptable";
 
 const ageValidator = v.string().withRule({
   name: "IsAge",
@@ -108,7 +108,7 @@ const result = validator.validate("notgoodenough");
 ### Create a custom validator
 
 Creating your own validator is easy, just create a class that extends either
-`Validator<T>` or `ValidatorWithRules<T>` (if you want a validator that can have
+`Validator<Type>` or `ValidatorWithRules<Type>` (if you want a validator that can have
 additional rules). You then need to implement the abstract method
 `validate(value: unknown) => ValidationResult<Type>` where Type is the return
 type/the type that will be inferred, and also the type that is given to the

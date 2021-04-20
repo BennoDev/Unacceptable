@@ -1,15 +1,15 @@
 # Type
 
 Validates the given object's shape where the specified keys have to pass their
-respective validators. Ever key in present in the validated value and did not
-pass through a validator will be _stripped_. Error messages from this validator
-will have context information (the key) added. It will infer to an object where
-the keys have the infered type of their respective validators.
+respective validators. Every key that is present in the validated value and did
+not pass through a validator _will be stripped_. Error messages from this
+validator will have context information (the key) added. It will infer to an
+object where the keys have the inferred type of their respective validators.
 
 Example:
 
 ```ts
-import { v, Infer, IValidator } from "unacceptable";
+import { Infer, IValidator, v } from "unacceptable";
 
 const nonEmptyString = v.string().withRule({
   name: "NonEmptyString",
@@ -28,7 +28,7 @@ const addresses = v
             : "Number has to be a positive integer",
       }),
       zipCode: nonEmptyString,
-    })
+    }),
   )
   .withRule({
     name: "NonEmptyList",

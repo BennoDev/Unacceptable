@@ -1,34 +1,29 @@
 import { bench, runBenchmarks } from "./test-deps.ts";
-import { array } from "./lib/validators/array.ts";
-import { string } from "./lib/validators/string.ts";
-import { number } from "./lib/validators/number.ts";
-import { boolean } from "./lib/validators/boolean.ts";
-import { union } from "./lib/validators/union.ts";
-import { literal } from "./lib/validators/literal.ts";
-import { record } from "./lib/validators/record.ts";
-import { type } from "./lib/validators/type.ts";
-import { partial } from "./lib/validators/partial.ts";
-import { tuple } from "./lib/validators/tuple.ts";
+import { v } from "./mod.ts";
 
 bench({
   name: "type",
   runs: 1000000,
   func: ({ stop, start }) => {
-    const validator = type({
-      firstName: string(),
-      lastName: string(),
-      age: number(),
-      meta: partial({
-        contact: boolean(),
-        interests: array(
-          union([literal("OFFERS"), literal("BLOG_POSTS"), literal("NEWS")]),
+    const validator = v.type({
+      firstName: v.string(),
+      lastName: v.string(),
+      age: v.number(),
+      meta: v.partial({
+        contact: v.boolean(),
+        interests: v.array(
+          v.union([
+            v.literal("OFFERS"),
+            v.literal("BLOG_POSTS"),
+            v.literal("NEWS"),
+          ]),
         ),
       }),
-      addresses: array(
-        type({
-          street: string(),
-          city: string(),
-          zipCode: number(),
+      addresses: v.array(
+        v.type({
+          street: v.string(),
+          city: v.string(),
+          zipCode: v.number(),
         }),
       ),
     });
@@ -57,7 +52,7 @@ bench({
   name: "record",
   runs: 1000000,
   func: ({ stop, start }) => {
-    const validator = record(string());
+    const validator = v.record(v.string());
 
     start();
     validator.validate({ prop1: "Hey", prop2: "Buds", prop3: 123 });
@@ -69,7 +64,7 @@ bench({
   name: "array",
   runs: 10,
   func: ({ start, stop }) => {
-    const validator = array(string());
+    const validator = v.array(v.string());
     const testData: string[] = [];
     for (let i = 0; i < 1000000; i++) {
       testData.push(`Number: ${i}`);
@@ -85,16 +80,16 @@ bench({
   name: "union",
   runs: 1000000,
   func: ({ stop, start }) => {
-    const validator = union([
-      literal(200),
-      literal(201),
-      literal(202),
-      literal(204),
-      literal(400),
-      literal(401),
-      literal(403),
-      literal(404),
-      literal(500),
+    const validator = v.union([
+      v.literal(200),
+      v.literal(201),
+      v.literal(202),
+      v.literal(204),
+      v.literal(400),
+      v.literal(401),
+      v.literal(403),
+      v.literal(404),
+      v.literal(500),
     ]);
 
     start();
@@ -103,45 +98,45 @@ bench({
   },
 });
 
-const Vector = tuple([number(), number(), number()]);
+const Vector = v.tuple([v.number(), v.number(), v.number()]);
 
-const Asteroid = type({
-  type: literal("asteroid"),
+const Asteroid = v.type({
+  type: v.literal("asteroid"),
   location: Vector,
-  mass: number(),
+  mass: v.number(),
 });
 
-const Planet = type({
-  type: literal("planet"),
+const Planet = v.type({
+  type: v.literal("planet"),
   location: Vector,
-  mass: number(),
-  population: number(),
-  habitable: boolean(),
+  mass: v.number(),
+  population: v.number(),
+  habitable: v.boolean(),
 });
 
-const Rank = union([
-  literal("captain"),
-  literal("first mate"),
-  literal("officer"),
-  literal("ensign"),
+const Rank = v.union([
+  v.literal("captain"),
+  v.literal("first mate"),
+  v.literal("officer"),
+  v.literal("ensign"),
 ]);
 
-const CrewMember = type({
-  name: string(),
-  age: number(),
+const CrewMember = v.type({
+  name: v.string(),
+  age: v.number(),
   rank: Rank,
   home: Planet,
 });
 
-const Ship = type({
-  type: literal("ship"),
+const Ship = v.type({
+  type: v.literal("ship"),
   location: Vector,
-  mass: number(),
-  name: string(),
-  crew: array(CrewMember),
+  mass: v.number(),
+  name: v.string(),
+  crew: v.array(CrewMember),
 });
 
-const validator = union([Asteroid, Planet, Ship]);
+const validator = v.union([Asteroid, Planet, Ship]);
 
 const good = {
   type: "ship",

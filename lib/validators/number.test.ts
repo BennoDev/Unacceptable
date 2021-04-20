@@ -54,12 +54,6 @@ runFailureTestCases([
 ]);
 
 // Test cases with rules
-const between0And10: ValidationRule<number> = {
-  name: "between0And10",
-  fn: (value) =>
-    value >= 0 && value <= 10 ? null : "Number is not in between 0 and 10",
-};
-
 const isPositive: ValidationRule<number> = {
   name: "isPositive",
   fn: (value) => (value >= 0 ? null : "Number is not positive"),

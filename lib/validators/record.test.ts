@@ -77,7 +77,7 @@ runFailureTestCases([
 const doesntContainMessageKey: ValidationRule<Record<string, string>> = {
   name: "doesntContainMessageKey",
   fn: (value) =>
-    value.hasOwnProperty("message")
+    value["message"]
       ? "Dont use message property, it conflicts with internal implementation"
       : null,
 };

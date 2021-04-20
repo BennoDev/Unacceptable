@@ -55,14 +55,14 @@ class IntersectionValidator<
     const target = Array.isArray(validated[0]) ? [] : {};
     // Deep assign each validated value to the target to get the result.
     for (const one of validated) {
-      this.assign(target, one as object);
+      this.assign(target, one as Record<string, unknown>);
     }
     return target;
   }
 
   private assign(
     target: Record<string, any>,
-    source: object,
+    source: Record<string, unknown>,
   ): Record<string, unknown> {
     Object.entries(source).forEach(([key, value]) => {
       if (!this.isObject(value)) {
@@ -113,7 +113,7 @@ class IntersectionValidator<
     return target;
   }
 
-  private isObject(value: unknown): value is object {
+  private isObject(value: unknown): value is Record<string, unknown> {
     return value !== null && typeof value === "object";
   }
 }

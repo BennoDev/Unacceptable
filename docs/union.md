@@ -26,15 +26,15 @@ However it can also work for complex types:
 ```ts
 import { v } from "unacceptable";
 
-const Video = v.validate({
+const Video = v.type({
   type: v.literal("VIDEO"),
   name: v.string(),
   length: v.number(),
   categories: v.array(v.string()),
 });
 
-const Image = v.validate({
-  type: "IMAGE",
+const Image = v.type({
+  type: v.literal("IMAGE"),
   name: v.string(),
   fileType: v.union([v.literal("png"), v.literal("jpg"), v.literal("gif")]),
   alt: v.string(),
