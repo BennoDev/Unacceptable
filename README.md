@@ -1,6 +1,6 @@
 # Unacceptable
 
-### !! Don't use Unacceptable in production !!
+### !! Don't actually use Unacceptable !!
 
 > **I created this library to see how far I could take TypeScript's type
 > system. I've used it to serve as a demo for the language, and to learn more
