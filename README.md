@@ -2,7 +2,10 @@
 
 ### Don't use Unacceptable in production
 
-> **!! I created this library to see how far I could take TypeScript's type system. I've used it to serve as a demo for the language, and to learn more about it myself.** > **There are currently no plans to actively maintain it, so while it might work, do NOT use it. !!**
+> **!! I created this library to see how far I could take TypeScript's type
+> system. I've used it to serve as a demo for the language, and to learn more
+> about it myself.** > **There are currently no plans to actively maintain it,
+> so while it might work, do NOT use it. !!**
 
 ---
 
@@ -96,7 +99,7 @@ The return type for a rule is `string | null` where string refers to the error
 message.
 
 ```ts
-const validator = string().withRule({
+const validator = v.string().withRule({
   name: "Password",
   fn: () => {
     const trimmedValue = value.trim();
@@ -114,8 +117,8 @@ const result = validator.validate("notgoodenough");
 ### Create a custom validator
 
 Creating your own validator is easy, just create a class that extends either
-`Validator<Type>` or `ValidatorWithRules<Type>` (if you want a validator that can have
-additional rules). You then need to implement the abstract method
+`Validator<Type>` or `ValidatorWithRules<Type>` (if you want a validator that
+can have additional rules). You then need to implement the abstract method
 `validate(value: unknown) => ValidationResult<Type>` where Type is the return
 type/the type that will be inferred, and also the type that is given to the
 ValidatorWithRules generic class.

@@ -18,36 +18,33 @@ export type ValidationRule<Type = unknown> = {
   /**
    * Name for the rule (choosing a somewhat unique one will make error messages more descriptive).
    */
-  name: string;
+  readonly name: string;
   /**
    * Function that will be executed when a value is being validated.
    * A rule needs to return a `string` in case the rule failed, this string will be the error message for this rule.
    * If the rule has been passed successfully, it needs to return `null`.
    * @param value The value that is being validated.
    */
-  fn: (value: Type) => string | null;
+  readonly fn: (value: Type) => string | null;
 };
 
 export type ValidationError = {
   /**
    * Value that failed validation.
    */
-  value: unknown;
-
+  readonly value: unknown;
   /**
    * Error message for failed rules.
    */
-  message: string;
-
+  readonly message: string;
   /**
    * Name of the rule that failed.
    */
-  name?: string;
-
+  readonly name?: string;
   /**
    * Full path of the key relative to the root that is being validated.
    */
-  path?: string[];
+  readonly path?: string[];
 };
 
 /**
@@ -93,7 +90,6 @@ export interface IValidator<Type> {
    * type inferrence. To infer use the `Infer<T>` type.
    */
   readonly __TYPE__: Type;
-
   /**
    * Validates a value and returns a result.
    * @param value Value to validate
