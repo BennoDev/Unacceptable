@@ -1,6 +1,9 @@
 # Intersection
 
-Validates the given value successfully passes through all the argument validators. If any of the validators returns a failure, the entire operation will abort and result in a failure. The inferred type is an intersection of each of the validator's inferred static type.
+Validates the given value successfully passes through all the argument
+validators. If any of the validators returns a failure, the entire operation
+will abort and result in a failure. The inferred type is an intersection of each
+of the validator's inferred static type.
 
 Example:
 

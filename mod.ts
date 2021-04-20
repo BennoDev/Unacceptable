@@ -1,14 +1,14 @@
 // Types
 export {
-  ValidationError,
-  ValidationRule,
-  ValidationResult,
   Infer,
   IValidator,
+  ValidationError,
+  ValidationResult,
+  ValidationRule,
 } from "./lib/types.ts";
 
 // Validators
-export { isSuccess, isFailure, success, failure } from "./lib/result.ts";
+export { failure, isFailure, isSuccess, success } from "./lib/result.ts";
 export { Validator, ValidatorWithRules } from "./lib/validator.ts";
 
 import { any } from "./lib/validators/any.ts";

@@ -1,6 +1,8 @@
 # Unacceptable
 
-Unacceptable is a Deno-first library for validation and validating unknown data that takes advantage of Typescript's flexible type system, to allow static type generation from validators.
+Unacceptable is a Deno-first library for validation and validating unknown data
+that takes advantage of Typescript's flexible type system, to allow static type
+generation from validators.
 
 Strongly influenced by existing libraries such as io-ts, runtypes and joi.
 
@@ -42,7 +44,8 @@ if (isSuccess(result)) {
 }
 ```
 
-For examples of specific validators, check their respective documentation pages, or browse the tests.
+For examples of specific validators, check their respective documentation pages,
+or browse the tests.
 
 ## Documentation
 
@@ -52,7 +55,8 @@ Roughly speaking we can separate the validators into 3 types:
 - Non-primitive validators (`object, array, type, record`)
 - And those that fall outside (`any, unknown, union, intersection`)
 
-Each validator has a dedicated page in the documentation with examples and deeper explanations.
+Each validator has a dedicated page in the documentation with examples and
+deeper explanations.
 
 ### Validators
 
@@ -77,17 +81,21 @@ Available validators:
 
 ### Validation rules
 
-Certain validators, namely `string`, `number`, `array` and `record`, can have custom validation rules, added on top of the base validation. Validation should not mutate or change the data that is being validated, but merely assert conditions.
+Certain validators, namely `string`, `number`, `array` and `record`, can have
+custom validation rules, added on top of the base validation. Validation should
+not mutate or change the data that is being validated, but merely assert
+conditions.
 
-The return type for a rule is `string | null` where string refers to the error message.
+The return type for a rule is `string | null` where string refers to the error
+message.
 
 ```ts
 const validator = string().withRule({
   name: "Password",
   fn: () => {
     const trimmedValue = value.trim();
-    const isCorrectLength =
-      trimmedValue.length >= 8 && trimmedValue.length < 255;
+    const isCorrectLength = trimmedValue.length >= 8 &&
+      trimmedValue.length < 255;
     const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z]).{8,}$/;
     return isCorrectLength && passwordRegex.test(value);
   },
@@ -99,14 +107,17 @@ const result = validator.validate("notgoodenough");
 
 ### Create a custom validator
 
-Creating your own validator is easy, just create a class that extends either `Validator<T>` or `ValidatorWithRules<T>` (if you want a validator that can have additional rules).
-You then need to implement the abstract method `validate(value: unknown) => ValidationResult<Type>` where Type is the return type/the type that will be inferred, and also
-the type that is given to the ValidatorWithRules generic class.
+Creating your own validator is easy, just create a class that extends either
+`Validator<T>` or `ValidatorWithRules<T>` (if you want a validator that can have
+additional rules). You then need to implement the abstract method
+`validate(value: unknown) => ValidationResult<Type>` where Type is the return
+type/the type that will be inferred, and also the type that is given to the
+ValidatorWithRules generic class.
 
 Example: simple validator
 
 ```ts
-import { success, failure, Validator } from "unacceptable";
+import { failure, success, Validator } from "unacceptable";
 
 class DateValidator implements Validator<Date> {
   validate(value: unknown): ValidationResult<Date> {
@@ -164,4 +175,5 @@ const result = validator.validate(new Date().toISOString());
 // result is Success<Date>
 ```
 
-For more information you can look at the individual validator's documentation pages. Or dive into the source code / tests for concrete examples.
+For more information you can look at the individual validator's documentation
+pages. Or dive into the source code / tests for concrete examples.

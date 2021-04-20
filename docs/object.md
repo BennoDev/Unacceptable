@@ -1,6 +1,7 @@
 # Object
 
-Valides the given value is a plain object (null or array will result in a failure). Infers to `object`
+Valides the given value is a plain object (null or array will result in a
+failure). Infers to `object`
 
 Example:
 

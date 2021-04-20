@@ -1,6 +1,7 @@
 # Any
 
-One of the simplest validators, `any` will always return a success result, with a value that infers to `any`.
+One of the simplest validators, `any` will always return a success result, with
+a value that infers to `any`.
 
 Example:
 

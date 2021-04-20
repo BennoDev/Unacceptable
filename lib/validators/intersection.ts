@@ -1,27 +1,26 @@
 import {
+  Infer,
   IValidator,
   ValidationError,
-  Infer,
   ValidationResult,
 } from "../types.ts";
 import { Validator } from "../validator.ts";
-import { failure, success, isSuccess } from "../result.ts";
+import { failure, isSuccess, success } from "../result.ts";
 
 type Intersection<Union> = (
   Union extends any ? (k: Union) => void : never
-) extends (k: infer I) => void
-  ? I
+) extends (k: infer I) => void ? I
   : never;
 
 class IntersectionValidator<
-  Type extends [IValidator<any>, IValidator<any>, ...IValidator<any>[]]
+  Type extends [IValidator<any>, IValidator<any>, ...IValidator<any>[]],
 > extends Validator<Intersection<Infer<Type[number]>>> {
   constructor(private readonly validators: Type) {
     super();
   }
 
   validate(
-    value: unknown
+    value: unknown,
   ): ValidationResult<Intersection<Infer<Type[number]>>> {
     const errors: ValidationError[] = [];
     const validated: unknown[] = [];
@@ -63,7 +62,7 @@ class IntersectionValidator<
 
   private assign(
     target: Record<string, any>,
-    source: object
+    source: object,
   ): Record<string, unknown> {
     Object.entries(source).forEach(([key, value]) => {
       if (!this.isObject(value)) {
@@ -131,7 +130,7 @@ class IntersectionValidator<
  * // Name = { firstName: string } & { lastName: string } = { firstName: string, lastName: string }
  */
 export const intersection = <
-  Type extends [IValidator<any>, IValidator<any>, ...IValidator<any>[]]
+  Type extends [IValidator<any>, IValidator<any>, ...IValidator<any>[]],
 >(
-  validators: Type
+  validators: Type,
 ) => new IntersectionValidator(validators);

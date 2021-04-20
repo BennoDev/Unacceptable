@@ -1,4 +1,4 @@
-import { runSuccessTestCases, runFailureTestCases } from "./test-helpers.ts";
+import { runFailureTestCases, runSuccessTestCases } from "./test-helpers.ts";
 import { assertEquals } from "../../test-deps.ts";
 import { intersection } from "./intersection.ts";
 import { type } from "./type.ts";
@@ -178,7 +178,7 @@ Deno.test({
         type({
           street: string(),
           city: string(),
-        })
+        }),
       ),
       meta: intersection([tracking, timestamps]),
     });
@@ -192,7 +192,7 @@ Deno.test({
         type({
           street: string(),
           zipcode: number(),
-        })
+        }),
       ),
       meta: tracking,
     });

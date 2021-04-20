@@ -1,6 +1,6 @@
 import { Literal, ValidationResult } from "../types.ts";
 import { Validator } from "../validator.ts";
-import { success, failure } from "../result.ts";
+import { failure, success } from "../result.ts";
 
 class LiteralValidator<Type extends Literal> extends Validator<Type> {
   constructor(private readonly literal: Type) {
@@ -8,15 +8,14 @@ class LiteralValidator<Type extends Literal> extends Validator<Type> {
   }
 
   validate(value: unknown): ValidationResult<Type> {
-    return value === this.literal
-      ? success(value as Type)
-      : failure([
-          {
-            message: `Given value ${value} is not equal to expected: ${this.__TYPE__}`,
-            name: literal.toString(),
-            value,
-          },
-        ]);
+    return value === this.literal ? success(value as Type) : failure([
+      {
+        message:
+          `Given value ${value} is not equal to expected: ${this.__TYPE__}`,
+        name: literal.toString(),
+        value,
+      },
+    ]);
   }
 }
 

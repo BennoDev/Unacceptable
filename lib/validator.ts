@@ -1,8 +1,8 @@
 import {
-  ValidationRule,
-  ValidationError,
   IValidator,
+  ValidationError,
   ValidationResult,
+  ValidationRule,
 } from "./types.ts";
 
 export abstract class Validator<Type> implements IValidator<Type> {
@@ -17,7 +17,7 @@ export abstract class Validator<Type> implements IValidator<Type> {
    */
   protected withPath(
     errors: ValidationError[],
-    part: string
+    part: string,
   ): ValidationError[] {
     const errorswithPath: ValidationError[] = [];
 
@@ -66,7 +66,7 @@ export abstract class ValidatorWithRules<Type> implements IValidator<Type> {
    */
   protected withPath(
     errors: ValidationError[],
-    part: string
+    part: string,
   ): ValidationError[] {
     const errorswithPath: ValidationError[] = [];
 

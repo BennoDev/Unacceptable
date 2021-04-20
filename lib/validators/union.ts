@@ -1,4 +1,4 @@
-import { IValidator, ValidationResult, Infer } from "../types.ts";
+import { Infer, IValidator, ValidationResult } from "../types.ts";
 import { Validator } from "../validator.ts";
 import { failure, isSuccess } from "../result.ts";
 
@@ -6,7 +6,7 @@ import { failure, isSuccess } from "../result.ts";
  * Returns result of first validator
  */
 class UnionValidator<
-  Type extends [IValidator<any>, IValidator<any>, ...IValidator<any>[]]
+  Type extends [IValidator<any>, IValidator<any>, ...IValidator<any>[]],
 > extends Validator<Infer<Type[number]>> {
   constructor(private readonly validators: Type) {
     super();
@@ -41,7 +41,7 @@ class UnionValidator<
  * // ErrorCodes = "401" | "404"
  */
 export const union = <
-  Type extends [IValidator<any>, IValidator<any>, ...IValidator<any>[]]
+  Type extends [IValidator<any>, IValidator<any>, ...IValidator<any>[]],
 >(
-  validators: Type
+  validators: Type,
 ) => new UnionValidator(validators);

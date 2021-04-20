@@ -24,7 +24,8 @@ V1.1 (TBD)
 
 V1.2 (TBD)
 
-- [ ] better error messages for complex types (maybe generated names for unions / intersections?)
+- [ ] better error messages for complex types (maybe generated names for unions
+  / intersections?)
 - [ ] common validation rules / validators
 - [ ] branded?
 - [ ] date?

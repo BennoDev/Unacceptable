@@ -1,12 +1,15 @@
 # Partial
 
-Behaves similar to the `Type` validator, except that all values are also allowed to be `undefined`.
-The type that is inferred here is very similar to that of a `Type` validator, with the addition that every value is also allowed to be `undefined`. This is _not_ a deep partial, it only affect direct children of the partial validator.
+Behaves similar to the `Type` validator, except that all values are also allowed
+to be `undefined`. The type that is inferred here is very similar to that of a
+`Type` validator, with the addition that every value is also allowed to be
+`undefined`. This is _not_ a deep partial, it only affect direct children of the
+partial validator.
 
 Example:
 
 ```ts
-import { v, IValidator, Infer } from "unacceptable";
+import { Infer, IValidator, v } from "unacceptable";
 
 const nonEmptyString = v.string().withRule({
   name: "NonEmptyString",
@@ -25,7 +28,7 @@ const addresses = v
             : "Number has to be a positive integer",
       }),
       zipCode: nonEmptyString,
-    })
+    }),
   )
   .withRule({
     name: "NonEmptyList",

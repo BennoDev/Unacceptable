@@ -1,6 +1,7 @@
 # Unknown
 
-One of the simplest validators, `unknown` will always return a success result, with a value that infers to `unknown`.
+One of the simplest validators, `unknown` will always return a success result,
+with a value that infers to `unknown`.
 
 Example:
 

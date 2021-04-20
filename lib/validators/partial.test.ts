@@ -1,6 +1,6 @@
 import { assertEquals } from "../../test-deps.ts";
-import { runSuccessTestCases, runFailureTestCases } from "./test-helpers.ts";
-import { Success, Failure } from "../types.ts";
+import { runFailureTestCases, runSuccessTestCases } from "./test-helpers.ts";
+import { Failure, Success } from "../types.ts";
 import { partial } from "./partial.ts";
 import { string } from "./string.ts";
 import { number } from "./number.ts";
@@ -44,7 +44,7 @@ runSuccessTestCases([
         partial({
           street: string(),
           city: string(),
-        })
+        }),
       ),
     }),
     description:
@@ -126,7 +126,7 @@ runFailureTestCases([
         partial({
           street: string(),
           city: string(),
-        })
+        }),
       ),
     }),
     description:
@@ -149,7 +149,7 @@ runFailureTestCases([
         type({
           street: string(),
           city: string(),
-        })
+        }),
       ),
     }),
     description:
@@ -195,7 +195,7 @@ Deno.test({
         type({
           street: string(),
           city: string(),
-        })
+        }),
       ),
     });
 

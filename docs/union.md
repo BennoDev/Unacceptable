@@ -1,11 +1,14 @@
 # Union
 
-Validates the given value successfully passes through one of the argument validators.
-After the value successfully passes through a validator for the first time it will instantly return,
-so if it were to successfully validate through more than one validator, only the result of the first one in the list will be returned.
+Validates the given value successfully passes through one of the argument
+validators. After the value successfully passes through a validator for the
+first time it will instantly return, so if it were to successfully validate
+through more than one validator, only the result of the first one in the list
+will be returned.
 
-This validator is often used in combination with `literal` to validate and construct type literals.
-The inferred type is a union of all of the validator's static type.
+This validator is often used in combination with `literal` to validate and
+construct type literals. The inferred type is a union of all of the validator's
+static type.
 
 Example:
 

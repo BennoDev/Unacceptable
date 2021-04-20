@@ -1,4 +1,4 @@
-import { runSuccessTestCases, runFailureTestCases } from "./test-helpers.ts";
+import { runFailureTestCases, runSuccessTestCases } from "./test-helpers.ts";
 import { undefinedValidator } from "./undefined.ts";
 
 runSuccessTestCases([

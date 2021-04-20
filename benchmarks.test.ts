@@ -1,4 +1,4 @@
-import { runBenchmarks, bench } from "./test-deps.ts";
+import { bench, runBenchmarks } from "./test-deps.ts";
 import { array } from "./lib/validators/array.ts";
 import { string } from "./lib/validators/string.ts";
 import { number } from "./lib/validators/number.ts";
@@ -21,7 +21,7 @@ bench({
       meta: partial({
         contact: boolean(),
         interests: array(
-          union([literal("OFFERS"), literal("BLOG_POSTS"), literal("NEWS")])
+          union([literal("OFFERS"), literal("BLOG_POSTS"), literal("NEWS")]),
         ),
       }),
       addresses: array(
@@ -29,7 +29,7 @@ bench({
           street: string(),
           city: string(),
           zipCode: number(),
-        })
+        }),
       ),
     });
 

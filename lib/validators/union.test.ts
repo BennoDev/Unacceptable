@@ -1,4 +1,4 @@
-import { runSuccessTestCases, runFailureTestCases } from "./test-helpers.ts";
+import { runFailureTestCases, runSuccessTestCases } from "./test-helpers.ts";
 import { union } from "./union.ts";
 import { literal } from "./literal.ts";
 import { number } from "./number.ts";

@@ -1,19 +1,19 @@
 import {
-  ValidationResult,
-  IValidator,
   Infer,
+  IValidator,
   Literal,
   ValidationError,
+  ValidationResult,
 } from "../types.ts";
 import { Validator } from "../validator.ts";
-import { failure, success, isSuccess } from "../result.ts";
+import { failure, isSuccess, success } from "../result.ts";
 
 type TypeOfProps<Props extends Record<string, IValidator<any>>> = {
   [Key in keyof Props]: Infer<Props[Key]>;
 };
 
 class PartialValidator<
-  Props extends Record<string, IValidator<any>>
+  Props extends Record<string, IValidator<any>>,
 > extends Validator<
   // Can't use TypeOfProps here, as this type is treated different as an inline type declaration and results in incorrect inferrence
   {
@@ -35,7 +35,7 @@ class PartialValidator<
   }
 
   private validateObject(
-    value: Record<Literal, unknown>
+    value: Record<Literal, unknown>,
   ): ValidationResult<Partial<TypeOfProps<Props>>> {
     const validated: Record<Literal, unknown> = {};
     const errors: ValidationError[] = [];
@@ -71,5 +71,5 @@ class PartialValidator<
  * // CustomPartial = { name: string | undefined, age: string | undefined }.
  */
 export const partial = <Props extends Record<string, IValidator<any>>>(
-  validators: Props
+  validators: Props,
 ) => new PartialValidator(validators);

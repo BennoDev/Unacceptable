@@ -1,6 +1,6 @@
 import { assertEquals } from "../../test-deps.ts";
-import { runSuccessTestCases, runFailureTestCases } from "./test-helpers.ts";
-import { Success, Failure } from "../types.ts";
+import { runFailureTestCases, runSuccessTestCases } from "./test-helpers.ts";
+import { Failure, Success } from "../types.ts";
 import { type } from "./type.ts";
 import { string } from "./string.ts";
 import { number } from "./number.ts";
@@ -26,7 +26,7 @@ runSuccessTestCases([
       type({
         firstName: string(),
         lastName: string(),
-      })
+      }),
     ),
     description:
       "type: should return success for [{ firstName: string, lastName: string }]",
@@ -118,7 +118,7 @@ runFailureTestCases([
       type({
         firstName: string(),
         lastName: string(),
-      })
+      }),
     ),
     description:
       "type: should return failure for [{ firstName: string, lastName: string }]",
@@ -217,7 +217,7 @@ Deno.test({
         type({
           street: string(),
           city: string(),
-        })
+        }),
       ),
     });
 

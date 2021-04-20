@@ -1,7 +1,7 @@
 # String
 
-Valides the given value to be a string. Can have custom validation rules.
-Infers to `string`.
+Valides the given value to be a string. Can have custom validation rules. Infers
+to `string`.
 
 Example:
 

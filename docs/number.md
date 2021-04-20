@@ -1,7 +1,7 @@
 # Number
 
-Valides the given value to be a number. Can have custom validation rules.
-Infers to `number`.
+Valides the given value to be a number. Can have custom validation rules. Infers
+to `number`.
 
 Example:
 

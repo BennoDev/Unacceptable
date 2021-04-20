@@ -1,17 +1,16 @@
 import {
-  ValidationError,
   Infer,
   IValidator,
+  ValidationError,
   ValidationResult,
 } from "../types.ts";
 import { Validator } from "../validator.ts";
-import { failure, success, isSuccess } from "../result.ts";
+import { failure, isSuccess, success } from "../result.ts";
 
 type TupleValidators = [IValidator<any>, ...IValidator<any>[]];
 
 type TupleType<Type extends TupleValidators> = {
-  [Key in keyof Type]: Type[Key] extends IValidator<any>
-    ? Infer<Type[Key]>
+  [Key in keyof Type]: Type[Key] extends IValidator<any> ? Infer<Type[Key]>
     : never;
 };
 

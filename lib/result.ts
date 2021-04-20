@@ -1,7 +1,7 @@
 import {
-  ValidationError,
-  Success,
   Failure,
+  Success,
+  ValidationError,
   ValidationResult,
 } from "./types.ts";
 
@@ -28,7 +28,7 @@ export const failure = (errors: ValidationError[]): Failure => ({
  * @param result Result of a validator
  */
 export const isSuccess = <Type>(
-  result: ValidationResult<Type>
+  result: ValidationResult<Type>,
 ): result is Success<Type> => result.success;
 
 /**

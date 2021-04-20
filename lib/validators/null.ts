@@ -1,18 +1,16 @@
 import { ValidationResult } from "../types.ts";
 import { Validator } from "../validator.ts";
-import { success, failure } from "../result.ts";
+import { failure, success } from "../result.ts";
 
 class NullValidator extends Validator<null> {
   validate(value: unknown): ValidationResult<null> {
-    return value === null
-      ? success(value)
-      : failure([
-          {
-            message: "Given value is not null or undefined",
-            name: "null",
-            value,
-          },
-        ]);
+    return value === null ? success(value) : failure([
+      {
+        message: "Given value is not null or undefined",
+        name: "null",
+        value,
+      },
+    ]);
   }
 }
 

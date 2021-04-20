@@ -1,14 +1,14 @@
 import {
+  Infer,
   IValidator,
   ValidationError,
   ValidationResult,
-  Infer,
 } from "../types.ts";
-import { failure, success, isSuccess } from "../result.ts";
+import { failure, isSuccess, success } from "../result.ts";
 import { ValidatorWithRules } from "../validator.ts";
 
 class ArrayValidator<
-  ElementValidator extends IValidator<any>
+  ElementValidator extends IValidator<any>,
 > extends ValidatorWithRules<Array<Infer<ElementValidator>>> {
   constructor(private readonly elementValidator: ElementValidator) {
     super();
@@ -49,5 +49,5 @@ class ArrayValidator<
  * @param validator Validator for the array's elements, will be invoked for each.
  */
 export const array = <ElementValidator extends IValidator<any>>(
-  validator: ElementValidator
+  validator: ElementValidator,
 ) => new ArrayValidator(validator);

@@ -1,6 +1,6 @@
-import { ValidationError, ValidationResult, IValidator } from "../types.ts";
+import { IValidator, ValidationError, ValidationResult } from "../types.ts";
 import { ValidatorWithRules } from "../validator.ts";
-import { failure, success, isSuccess } from "../result.ts";
+import { failure, isSuccess, success } from "../result.ts";
 
 class RecordValidator<Value = unknown> extends ValidatorWithRules<
   Record<string, Value>

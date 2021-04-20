@@ -1,19 +1,19 @@
 import {
-  ValidationResult,
-  IValidator,
-  ValidationError,
-  Literal,
   Infer,
+  IValidator,
+  Literal,
+  ValidationError,
+  ValidationResult,
 } from "../types.ts";
 import { Validator } from "../validator.ts";
-import { failure, success, isSuccess } from "../result.ts";
+import { failure, isSuccess, success } from "../result.ts";
 
 type TypeOfProps<Props extends Record<string, IValidator<any>>> = {
   [Key in keyof Props]: Infer<Props[Key]>;
 };
 
 class TypeValidator<
-  Props extends Record<string, IValidator<any>>
+  Props extends Record<string, IValidator<any>>,
 > extends Validator<
   // Can't use TypeOfProps here, as this type is treated different as an inline type declaration and results in incorrect inferrence
   {
@@ -35,7 +35,7 @@ class TypeValidator<
   }
 
   private validateObject(
-    value: Record<Literal, unknown>
+    value: Record<Literal, unknown>,
   ): ValidationResult<TypeOfProps<Props>> {
     const validated: Record<Literal, unknown> = {};
     const errors: ValidationError[] = [];
@@ -68,5 +68,5 @@ class TypeValidator<
  * // Name = { firstName: string, lastName: string }
  */
 export const type = <Props extends Record<string, IValidator<any>>>(
-  validators: Props
+  validators: Props,
 ) => new TypeValidator(validators);

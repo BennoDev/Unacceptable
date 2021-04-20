@@ -1,10 +1,10 @@
 import { assertEquals } from "../../test-deps.ts";
-import { runSuccessTestCases, runFailureTestCases } from "./test-helpers.ts";
+import { runFailureTestCases, runSuccessTestCases } from "./test-helpers.ts";
 import { record } from "./record.ts";
 import { number } from "./number.ts";
 import { string } from "./string.ts";
 import { array } from "./array.ts";
-import { ValidationRule, Failure } from "../types.ts";
+import { Failure, ValidationRule } from "../types.ts";
 
 runSuccessTestCases([
   {
@@ -99,7 +99,7 @@ runSuccessTestCases([
   },
   {
     validator: record(string().withRule(containsUnderscore)).withRule(
-      doesntContainMessageKey
+      doesntContainMessageKey,
     ),
     value: {
       otherProperty: "bye_bud",

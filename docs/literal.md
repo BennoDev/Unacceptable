@@ -1,7 +1,7 @@
 # Literal
 
-Valides the given value is equal to the literal argument (has to be a string or a number).
-Infers to the value of the literal type.
+Valides the given value is equal to the literal argument (has to be a string or
+a number). Infers to the value of the literal type.
 
 Example:
 

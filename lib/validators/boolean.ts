@@ -6,8 +6,8 @@ class BooleanValidator extends Validator<boolean> {
   validate(value: unknown): ValidationResult<boolean> {
     return typeof value !== "boolean"
       ? failure([
-          { message: "Given value is not a boolean", name: "boolean", value },
-        ])
+        { message: "Given value is not a boolean", name: "boolean", value },
+      ])
       : success(value);
   }
 }

@@ -3,13 +3,14 @@
  * some real world scenario's testing how various parts / validators work together.
  */
 import { assertEquals } from "./test-deps.ts";
-import { v, Infer, IValidator } from "./mod.ts";
+import { Infer, IValidator, v } from "./mod.ts";
 
 const rules = {
   url: {
     name: "Url",
     fn: (value: string) => {
-      const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
+      const urlRegex =
+        /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
       return urlRegex.test(value) ? null : `${value} is not a valid url`;
     },
   },
@@ -30,7 +31,8 @@ const rules = {
   dateString: {
     name: "DateString",
     fn: (value: string) => {
-      const isoRegex = /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/;
+      const isoRegex =
+        /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/;
       return isoRegex.test(value) ? null : "Value is not a valid ISO string";
     },
   },
@@ -69,7 +71,7 @@ const CreateUserRequest = v.type({
         street: cd.shortText,
         city: cd.shortText,
         zipCode: cd.zipCode,
-      })
+      }),
     ),
     v.undefined(),
   ]),
