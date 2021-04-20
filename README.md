@@ -1,5 +1,11 @@
 # Unacceptable
 
+### Don't use Unacceptable in production
+
+> **!! I created this library to see how far I could take TypeScript's type system. I've used it to serve as a demo for the language, and to learn more about it myself.** > **There are currently no plans to actively maintain it, so while it might work, do NOT use it. !!**
+
+---
+
 Unacceptable is a Deno-first library for validation and validating unknown data
 that takes advantage of Typescript's flexible type system, to allow static type
 generation from validators.
